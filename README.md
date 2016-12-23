@@ -1,19 +1,23 @@
 # anonydog
 Woof! On the internet, nobody knows you're a dog.
 
+Is your identity influencing the way project mantainers look at your pull
+requests? I can help you answering that question!
+
 I'm a bot (or a dog -- you'll never know for sure) that helps you stay
 anonymous on github.
 
 To use me:
 
-1. Go to https://anonydog.org/authorize and authorize me to talk to
-   github on your behalf (I promise I won't do anything nasty)
-2. Fork anyuser/anyrepo on github
-4. Create a branch and work normally
-5. echo 'anyuser/anyrepo' > Anonydogfile
-6. Open a pull request to `anonydog/anyrepo` (instead of `anyuser/anyrepo`)
+1. Go to https://anonydog.org/fork and tell me which github repo you want to
+   work on.
+2. Instead of forking `anyuser/anyrepo`, fork `anonydog/anyuser-anyrepo`
+3. Create a branch and work as you normally would
+4. When you're done, open a pull request to `anonydog/anyuser-anyrepo`
 
-If you do that, strip your name from author fields everywhere, submit a pull
-request to the original repo on your behalf and delete your branch. Only if
-your pull request gets accepted, I will reveal your true identity and you'll
-get credit for it.
+When I see that, I'll flip a magical coin and either (1) open the pull request
+to the original repo on your behalf or (2) strip your name from every possible
+author field and submit a pull request under my own name.
+
+Don't worry. If your pull request gets accepted, I will reveal your github
+handle and you'll get credit for it.
