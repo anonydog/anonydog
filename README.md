@@ -13,5 +13,7 @@ To use me:
 5. echo 'anyuser/anyrepo' > Anonydogfile
 6. Open a pull request to `anonydog/anyrepo` (instead of `anyuser/anyrepo`)
 
-And I will strip your name from author fields everywhere, submit a pull
-request to the original repo on your behalf and delete your branch.
+If you do that, strip your name from author fields everywhere, submit a pull
+request to the original repo on your behalf and delete your branch. Only if
+your pull request gets accepted, I will reveal your true identity and you'll
+get credit for it.
