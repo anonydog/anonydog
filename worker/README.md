@@ -1,12 +1,15 @@
-Core anonymizer
+Anonydog Worker
 ====
-This is a proof of concept for the core anonymizing component in anonydog.
-It creates an anonymized list of git commits by changing the author field
-from the source commits.
+This is the main bot in anonydog. It is supposed to be used in the
+background through some kind of queueing system.
 
-The rest will be _just_ pumbling. ;-)
+It mainly receives and reacts to two kinds of commands:
 
-Running
+* fork: when someone asks for an anonymized fork via
+  http://anonydog.org/fork
+* pull request: when someone opens a PR to one of anonydog's repos
+
+Cheat Sheet for Development
 ----
     $ bundle update
-    $ bundle exec ruby hello_world.rb
+    $ bundle exec rake test
