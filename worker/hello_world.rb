@@ -2,6 +2,7 @@ require 'rugged'
 require 'securerandom'
 
 head_repo_clone_url = 'https://github.com/anonydog/testing-contributor_repo.git'
+base_repo_clone_url = 'https://github.com/anonydog/testing-maintainer_repo.git'
 
 # repo layout for reference
 #
@@ -18,12 +19,14 @@ head_repo_clone_url = 'https://github.com/anonydog/testing-contributor_repo.git'
 #       |/
 #  4879 o
 
-# non-fast-forward pull request (TODO)
-base_commit = 'c118828dd9d5669da9755a03b03f1a240a71864d'
-tip_commit = '1c1ccfe285676856ae719d27e9e90aaff23d42db'
+# TODO: convert these into proper tests
 
 # simple fast-forward pull request
 base_commit = '487958f50bc90109f3b1ed89701894b1fe5a03ee'
+tip_commit = '1c1ccfe285676856ae719d27e9e90aaff23d42db'
+#
+# non-fast-forward pull request
+base_commit = 'c118828dd9d5669da9755a03b03f1a240a71864d'
 tip_commit = '1c1ccfe285676856ae719d27e9e90aaff23d42db'
 
 repo_location = "/tmp/#{SecureRandom.hex}"
@@ -34,13 +37,18 @@ repo = Rugged::Repository.clone_at(
   head_repo_clone_url,
   repo_location)
 
-new_tip = base_commit
+repo.remotes.create('upstream', base_repo_clone_url)
+repo.fetch('upstream')
+
+new_tip = merge_base = repo.merge_base(tip_commit, base_commit)
+
+puts "selected #{merge_base} as merge base"
 
 Rugged::Walker.walk(
   repo,
   :sort => Rugged::SORT_TOPO | Rugged::SORT_REVERSE, # parents first
   :show => tip_commit,
-  :hide => base_commit) {
+  :hide => merge_base) {
   |commit|
     puts "anonymizing #{commit.oid}"
     current = Rugged::Commit.create(
