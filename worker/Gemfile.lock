@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rugged (0.25.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rugged (~> 0.25)
+
+BUNDLED WITH
+   1.13.6
