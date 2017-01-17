@@ -45,11 +45,13 @@ class AnonymizeTest < MiniTest::Test
     anonymized_repo = Rugged::Repository.new(anonymized_pr.repo_path)
     anonymized_commit = anonymized_repo.lookup(anonymized_pr.head)
 
-    assert_equal("d0098fb205f9c32422e318bd3ebfb1520acad32c", anonymized_commit.oid)
+    assert_equal("d7f088cdefb66fc12e401ecae5ac13be9ad5fd08", anonymized_commit.oid)
     # check if all three commits were anonymized
     (1..3).each do |i|
-      assert_equal("Scooby Doo", anonymized_commit.author[:name], "commit #{i}")
-      assert_equal("scooby@anonydog.org", anonymized_commit.author[:email], "commit #{i}")
+      assert_equal("Scooby Doo", anonymized_commit.author[:name], "commit author #{i}")
+      assert_equal("scooby@anonydog.org", anonymized_commit.author[:email], "commit author #{i}")
+      assert_equal(anonymized_commit.author[:name], anonymized_commit.committer[:name], "commit committer #{i}")
+      assert_equal(anonymized_commit.author[:email], anonymized_commit.committer[:email], "commit committer #{i}")
 
       anonymized_commit = anonymized_commit.parents[0]
     end

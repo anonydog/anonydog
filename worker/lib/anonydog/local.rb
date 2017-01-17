@@ -1,4 +1,5 @@
 require 'ostruct'
+require 'rugged'
 require 'securerandom'
 
 module Anonydog
@@ -21,25 +22,28 @@ module Anonydog
       repo.fetch('upstream')
 
       new_head = merge_base = repo.merge_base(head_commit, base_commit)
-
-      Rugged::Walker.walk(
+      
+            Rugged::Walker.walk(
         repo,
         :sort => Rugged::SORT_TOPO | Rugged::SORT_REVERSE, # parents first
         :show => head_commit,
         :hide => merge_base) {
         |commit|
+          fake_author_sig = {
+            :name => 'Scooby Doo',
+            :email => 'scooby@anonydog.org',
+            :time => commit.author[:time]
+          }
+
           current = Rugged::Commit.create(
             repo,
             :message => commit.message,
-            :committer => commit.committer,
             :tree => commit.tree,
+            # TODO: check for unintended side-effects here
+            :committer => fake_author_sig,
             #TODO: inside a PR, can a commit have more than one parent?
             :parents => [new_head],
-            :author => {
-              :name => 'Scooby Doo',
-              :email => 'scooby@anonydog.org',
-              :time => commit.author[:time]
-            }
+            :author => fake_author_sig
           )
 
           new_head = current
