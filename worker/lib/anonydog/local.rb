@@ -1,9 +1,19 @@
-require 'ostruct'
 require 'rugged'
 require 'securerandom'
 
 module Anonydog
   class Local
+    # Anonymizes a commit chain (head) for merging into another (base) chain.
+    # Returns a Rugged::Repository where HEAD is the anonymized branch.
+    #
+    # Params:
+    # :head => {
+    #   :clone_url => URL for the repo containing the head commit,
+    #   :commit => SHA-1 identifier for the head commit}
+    #
+    # :base => {
+    #   :clone_url => URL for the repo containing the base commit,
+    #   :commit => SHA-1 identifier for the base commit}
     def self.anonymize(opts)
       head_repo_clone_url = opts[:head][:clone_url]
       head_commit = opts[:head][:commit]
@@ -11,7 +21,7 @@ module Anonydog
       base_repo_clone_url = opts[:base][:clone_url]
       base_commit = opts[:base][:commit]
 
-      #TODO: use in-memory fs
+      #TODO: use in-memory backend (Rugged::InMemory::Backend)
       repo_path = "/tmp/#{SecureRandom.hex}"
 
       repo = Rugged::Repository.clone_at(
@@ -48,8 +58,10 @@ module Anonydog
 
           new_head = current
       }
-
-      OpenStruct.new(:repo_path => repo_path, :head => new_head)
+      
+      branch = repo.branches.create("pullrequest-#{SecureRandom.hex(4)}", new_head)
+      repo.head = "refs/heads/#{branch.name}"
+      repo
     end
   end
 end

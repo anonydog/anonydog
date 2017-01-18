@@ -1,4 +1,4 @@
-require 'anonydog/local'
-
 module Anonydog
 end
+
+require 'anonydog/local'

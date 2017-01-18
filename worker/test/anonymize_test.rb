@@ -1,9 +1,8 @@
-# we need to set this here because rugged/libgit2 return ascii strings
+# we need to set this here because rugged and libgit2 return ascii strings
 # encoding: US-ASCII
 
 require 'minitest/autorun'
 require 'anonydog'
-require 'rugged'
 
 class AnonymizeTest < MiniTest::Test
   # repo layout for reference
@@ -31,7 +30,7 @@ class AnonymizeTest < MiniTest::Test
     upstream_head = 'c118828dd9d5669da9755a03b03f1a240a71864d'
     pr_head = '1c1ccfe285676856ae719d27e9e90aaff23d42db'
 
-    anonymized_pr = Anonydog::Local.anonymize(
+    anonymized_repo = Anonydog::Local.anonymize(
       :head => {
         :clone_url => HEAD_REPO_CLONE_URL,
         :commit => pr_head
@@ -42,8 +41,12 @@ class AnonymizeTest < MiniTest::Test
       }
     )
 
-    anonymized_repo = Rugged::Repository.new(anonymized_pr.repo_path)
-    anonymized_commit = anonymized_repo.lookup(anonymized_pr.head)
+    anonymized_ref = anonymized_repo.head
+
+    assert(anonymized_ref.branch?)
+    assert(anonymized_ref.name.start_with? 'refs/heads/pullrequest-')
+
+    anonymized_commit = anonymized_ref.target
 
     assert_equal("d7f088cdefb66fc12e401ecae5ac13be9ad5fd08", anonymized_commit.oid)
     # check if all three commits were anonymized
