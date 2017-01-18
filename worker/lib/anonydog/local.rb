@@ -32,7 +32,7 @@ module Anonydog
       repo.fetch('upstream')
 
       new_head = merge_base = repo.merge_base(head_commit, base_commit)
-      
+
             Rugged::Walker.walk(
         repo,
         :sort => Rugged::SORT_TOPO | Rugged::SORT_REVERSE, # parents first
@@ -58,10 +58,23 @@ module Anonydog
 
           new_head = current
       }
-      
+
       branch = repo.branches.create("pullrequest-#{SecureRandom.hex(4)}", new_head)
       repo.head = "refs/heads/#{branch.name}"
       repo
+    end
+
+    # Publishes HEAD ref/branch from a rugged repository to a remote (github)
+    # repo.
+    def self.publish(local_repo, remote_repo_url)
+      creds = Rugged::Credentials::SshKey.new(
+        publickey: File.expand_path("~/.ssh/bot.pub"),
+        privatekey: File.expand_path("~/.ssh/bot"),
+        username: 'git')
+
+      remote = local_repo.remotes.create_anonymous(remote_repo_url)
+
+      remote.push([local_repo.head.name], {credentials: creds})
     end
   end
 end
