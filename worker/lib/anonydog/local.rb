@@ -14,12 +14,17 @@ module Anonydog
     # :base => {
     #   :clone_url => URL for the repo containing the base commit,
     #   :commit => SHA-1 identifier for the base commit}
+    #
+    # :anonymized_branch => what should we call the anonymized branch (usually
+    #   something like "pullrequest-8e457310")
     def self.anonymize(opts)
       head_repo_clone_url = opts[:head][:clone_url]
       head_commit = opts[:head][:commit]
 
       base_repo_clone_url = opts[:base][:clone_url]
       base_commit = opts[:base][:commit]
+
+      branch_name = opts[:anonymized_branch]
 
       #TODO: use in-memory backend (Rugged::InMemory::Backend)
       repo_path = "/tmp/#{SecureRandom.hex}"
@@ -33,7 +38,7 @@ module Anonydog
 
       new_head = merge_base = repo.merge_base(head_commit, base_commit)
 
-            Rugged::Walker.walk(
+      Rugged::Walker.walk(
         repo,
         :sort => Rugged::SORT_TOPO | Rugged::SORT_REVERSE, # parents first
         :show => head_commit,
@@ -59,8 +64,8 @@ module Anonydog
           new_head = current
       }
 
-      branch = repo.branches.create("pullrequest-#{SecureRandom.hex(4)}", new_head)
-      repo.head = "refs/heads/#{branch.name}"
+      repo.branches.create(branch_name, new_head)
+      repo.head = "refs/heads/#{branch_name}"
       repo
     end
 
@@ -73,8 +78,28 @@ module Anonydog
         username: 'git')
 
       remote = local_repo.remotes.create_anonymous(remote_repo_url)
-
       remote.push([local_repo.head.name], {credentials: creds})
+    end
+
+    # Publishes anonymized branch to given URL. Returns randomly generated name
+    # for the anonymized ref (can be used to open the PR)
+    def self.publish_anonymized(
+      base_clone_url, base_commit,
+      head_clone_url, head_commit,
+      publish_url
+    )
+
+      anonbranch_name = "pullrequest-#{SecureRandom.hex(4)}"
+
+      anonrepo = Anonydog::Local.anonymize(
+        base: { clone_url: base_clone_url, commit: base_commit },
+        head: { clone_url: head_clone_url, commit: head_commit },
+        anonymized_branch: anonbranch_name
+      )
+
+      Anonydog::Local.publish(anonrepo, publish_url)
+
+      anonbranch_name
     end
   end
 end
