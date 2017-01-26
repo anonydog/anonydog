@@ -26,7 +26,8 @@ module Anonydog
 
       branch_name = opts[:anonymized_branch]
 
-      #TODO: use in-memory backend (Rugged::InMemory::Backend)
+      #FIXME: use in-memory backend (Rugged::InMemory::Backend)
+      #current approach will fill the disk
       repo_path = "/tmp/#{SecureRandom.hex}"
 
       repo = Rugged::Repository.clone_at(
@@ -72,6 +73,7 @@ module Anonydog
     # Publishes HEAD ref/branch from a rugged repository to a remote (github)
     # repo.
     def self.publish(local_repo, remote_repo_url)
+      #FIXME: parametrize credentials (this key is for arraisbot/dev)
       creds = Rugged::Credentials::SshKey.new(
         publickey: File.expand_path("~/.ssh/bot.pub"),
         privatekey: File.expand_path("~/.ssh/bot"),
