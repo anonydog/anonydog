@@ -1,17 +1,35 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    daemons (1.2.4)
+    eventmachine (1.2.1)
+    json (2.0.3)
     minitest (5.10.1)
+    rack (1.6.5)
+    rack-protection (1.5.3)
+      rack
     rake (12.0.0)
     rugged (0.25.1)
+    sinatra (1.4.7)
+      rack (~> 1.5)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
+    thin (1.7.0)
+      daemons (~> 1.0, >= 1.0.9)
+      eventmachine (~> 1.0, >= 1.0.4)
+      rack (>= 1, < 3)
+    tilt (2.0.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  json (~> 2.0)
   minitest (~> 5.10)
   rake (~> 12.0)
   rugged (~> 0.25)
+  sinatra (~> 1.4)
+  thin (~> 1.7)
 
 BUNDLED WITH
    1.13.7
