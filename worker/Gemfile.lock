@@ -1,15 +1,26 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.5.0)
+      public_suffix (~> 2.0, >= 2.0.2)
     daemons (1.2.4)
     eventmachine (1.2.1)
+    faraday (0.11.0)
+      multipart-post (>= 1.2, < 3)
     json (2.0.3)
     minitest (5.10.1)
+    multipart-post (2.0.0)
+    octokit (4.6.2)
+      sawyer (~> 0.8.0, >= 0.5.3)
+    public_suffix (2.0.5)
     rack (1.6.5)
     rack-protection (1.5.3)
       rack
     rake (12.0.0)
     rugged (0.25.1)
+    sawyer (0.8.1)
+      addressable (>= 2.3.5, < 2.6)
+      faraday (~> 0.8, < 1.0)
     sinatra (1.4.7)
       rack (~> 1.5)
       rack-protection (~> 1.4)
@@ -26,6 +37,7 @@ PLATFORMS
 DEPENDENCIES
   json (~> 2.0)
   minitest (~> 5.10)
+  octokit (~> 4.6)
   rake (~> 12.0)
   rugged (~> 0.25)
   sinatra (~> 1.4)
