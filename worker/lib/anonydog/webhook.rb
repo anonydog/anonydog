@@ -11,6 +11,7 @@ module Anonydog
 
     post '/_github/webhook' do
       content_type :txt
+      # FIXME: check secret
 
       event = JSON.parse(request.body.read)
 
