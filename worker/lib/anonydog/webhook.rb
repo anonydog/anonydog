@@ -18,6 +18,8 @@ module Anonydog
       return "ignored" if !is_open_pull_request(event)
 
       pull_request_url = event["pull_request"]["url"]
+      pull_request_title = event["pull_request"]["title"]
+      pull_request_body = event["pull_request"]["body"]
       comments_url = event["pull_request"]["comments_url"]
       base_clone_url = event["pull_request"]["base"]["repo"]["clone_url"]
       base_commit = event["pull_request"]["base"]["sha"]
@@ -41,7 +43,13 @@ module Anonydog
       bot_repo = github_api.repository(bot_repo_full_name)
       original_repo_name = bot_repo.parent["full_name"]
 
-      github_api.create_pull_request(original_repo_name, "master", "#{bot_user_name}:#{anonref}", "hardcoded title (fixme!)", "hardcoded description (fixme!)")
+      github_api.create_pull_request(
+        original_repo_name,
+        "master",
+        "#{bot_user_name}:#{anonref}",
+        pull_request_title,
+        pull_request_body
+      )
 
       puts msg
       msg
