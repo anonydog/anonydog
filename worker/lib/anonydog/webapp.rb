@@ -5,6 +5,7 @@ module Anonydog
   class Webapp < Sinatra::Base
     post "/fork" do
       github_api = Octokit::Client.new(access_token: ENV['GITHUB_API_ACCESS_TOKEN'])
+      # FIXME params injection?
       forked_repo = github_api.fork("#{params[:user]}/#{params[:repo]}")
 
       github_api.create_hook(forked_repo.full_name,
