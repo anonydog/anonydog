@@ -26,13 +26,12 @@ module Anonydog
 
       branch_name = opts[:anonymized_branch]
 
-      #FIXME: use in-memory backend (Rugged::InMemory::Backend)
-      #current approach will fill the disk
       repo_path = "/tmp/#{SecureRandom.hex}"
 
       repo = Rugged::Repository.clone_at(
         head_repo_clone_url,
-        repo_path)
+        repo_path,
+        bare: true)
 
       repo.remotes.create('upstream', base_repo_clone_url)
       repo.fetch('upstream')
@@ -100,6 +99,10 @@ module Anonydog
       )
 
       Anonydog::Local.publish(anonrepo, publish_url)
+      
+      #TODO: should we use an in-memory repo?
+      puts "deleting #{anonrepo.path}"
+      FileUtils.rm_rf(anonrepo.path)
 
       anonbranch_name
     end
