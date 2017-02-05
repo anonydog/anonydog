@@ -17,46 +17,60 @@ module Anonydog
 
       return "ignored" if !is_open_pull_request(event)
 
-      pull_request_url = event["pull_request"]["url"]
-      pull_request_title = event["pull_request"]["title"]
-      pull_request_body = event["pull_request"]["body"]
-      comments_url = event["pull_request"]["comments_url"]
-      base_clone_url = event["pull_request"]["base"]["repo"]["clone_url"]
-      base_commit = event["pull_request"]["base"]["sha"]
-      head_clone_url = event["pull_request"]["head"]["repo"]["clone_url"]
-      head_commit = event["pull_request"]["head"]["sha"]
-      publish_url = event["pull_request"]["base"]["repo"]["ssh_url"]
-      bot_user_name = event["pull_request"]["base"]["repo"]["owner"]["login"]
-      bot_repo_full_name = event["pull_request"]["base"]["repo"]["full_name"]
+      pull_request = {}
+      pull_request[:url] = event["pull_request"]["url"]
+      pull_request[:title] = event["pull_request"]["title"]
+      pull_request[:body] = event["pull_request"]["body"]
+      pull_request[:comments_url] = event["pull_request"]["comments_url"]
 
+      pull_request[:base] = {}
+      pull_request[:base][:clone_url] = event["pull_request"]["base"]["repo"]["clone_url"]
+      pull_request[:base][:commit_sha] = event["pull_request"]["base"]["sha"]
+      pull_request[:base][:ssh_url] = event["pull_request"]["base"]["repo"]["ssh_url"]
+      pull_request[:base][:owner_login] = event["pull_request"]["base"]["repo"]["owner"]["login"]
+      pull_request[:base][:repo_full_name] = event["pull_request"]["base"]["repo"]["full_name"]
+
+      pull_request[:head] = {}
+      pull_request[:head][:clone_url] = event["pull_request"]["head"]["repo"]["clone_url"]
+      pull_request[:head][:commit_sha] = event["pull_request"]["head"]["sha"]
+
+      #FIXME: push message to queue
+      do_anonymize(pull_request)
+    end
+
+    def is_open_pull_request(event)
+      "opened" == event["action"] && !event["pull_request"].nil?
+    end
+
+# ^^^ webhook (queue producer) ^^^
+# --------------------------------
+# vvv worker  (queue consumer) vvv
+
+    def do_anonymize(pull_request)
       anonref = Anonydog::Local.publish_anonymized(
-        base_clone_url, base_commit,
-        head_clone_url, head_commit,
-        publish_url,
+        pull_request[:base][:clone_url], pull_request[:base][:commit_sha],
+        pull_request[:head][:clone_url], pull_request[:head][:commit_sha],
+        pull_request[:base][:ssh_url]
       )
 
-      msg = "anonymized commits for #{pull_request_url} are at #{anonref}"
+      msg = "anonymized commits for #{pull_request[:url]} are at #{anonref}"
 
       github_api = Octokit::Client.new(access_token: ENV['GITHUB_API_ACCESS_TOKEN'])
-      github_api.post(comments_url, body: msg)
+      github_api.post(pull_request[:comments_url], body: msg)
 
-      bot_repo = github_api.repository(bot_repo_full_name)
+      bot_repo = github_api.repository(pull_request[:base][:repo_full_name])
       original_repo_name = bot_repo.parent["full_name"]
 
       github_api.create_pull_request(
         original_repo_name,
         "master",
-        "#{bot_user_name}:#{anonref}",
-        pull_request_title,
-        pull_request_body
+        "#{pull_request[:base][:owner_login]}:#{anonref}",
+        pull_request[:title],
+        pull_request[:body]
       )
 
       puts msg
       msg
-    end
-
-    def is_open_pull_request(event)
-      "opened" == event["action"] && !event["pull_request"].nil?
     end
   end
 end
