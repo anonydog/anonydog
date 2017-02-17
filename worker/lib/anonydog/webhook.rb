@@ -11,9 +11,12 @@ module Anonydog
 
     post '/_github/webhook' do
       content_type :txt
-      # FIXME: check secret
+      payload_body = request.body.read
 
-      event = JSON.parse(request.body.read)
+      # TODO move verification to middleware
+      verify_signature(payload_body)
+
+      event = JSON.parse(payload_body)
 
       return "ignored" if !is_open_pull_request(event)
 
@@ -36,6 +39,11 @@ module Anonydog
 
       #FIXME: push message to queue
       do_anonymize(pull_request)
+    end
+
+    def verify_signature(payload_body)
+      signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), ENV['GITHUB_WEBHOOK_SECRET'], payload_body)
+      return halt 400, "Signature doesn't check. Are you Github?" unless Rack::Utils.secure_compare(signature, request.env['HTTP_X_HUB_SIGNATURE'])
     end
 
     def is_open_pull_request(event)

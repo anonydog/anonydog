@@ -12,6 +12,7 @@ module Anonydog
         "web",
         {
           url: ENV['GITHUB_WEBHOOK_ENDPOINT'],
+          secret: ENV['GITHUB_WEBHOOK_SECRET'],
           content_type: 'json'
         },
         {

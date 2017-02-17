@@ -6,4 +6,8 @@ if [ -z ${GITHUB_WEBHOOK_ENDPOINT+x} ]; then
   echo "need GITHUB_WEBHOOK_ENDPOINT"
   exit
 fi
+if [ -z ${GITHUB_WEBHOOK_SECRET+x} ]; then
+  echo "need GITHUB_WEBHOOK_SECRET"
+  exit
+fi
 bundle exec rackup -s thin -o $IP -p $PORT webapp.config.ru
