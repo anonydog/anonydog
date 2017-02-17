@@ -72,10 +72,9 @@ module Anonydog
     # Publishes HEAD ref/branch from a rugged repository to a remote (github)
     # repo.
     def self.publish(local_repo, remote_repo_url)
-      #FIXME: parametrize credentials (this key is for arraisbot/dev)
       creds = Rugged::Credentials::SshKey.new(
-        publickey: File.expand_path("~/.ssh/bot.pub"),
-        privatekey: File.expand_path("~/.ssh/bot"),
+        publickey: File.expand_path("#{ENV['GITHUB_SSH_KEY_PATH']}.pub"),
+        privatekey: File.expand_path("#{ENV['GITHUB_SSH_KEY_PATH']}"),
         username: 'git')
 
       remote = local_repo.remotes.create_anonymous(remote_repo_url)
@@ -99,7 +98,7 @@ module Anonydog
       )
 
       Anonydog::Local.publish(anonrepo, publish_url)
-      
+
       #TODO: should we use an in-memory repo?
       puts "deleting #{anonrepo.path}"
       FileUtils.rm_rf(anonrepo.path)
