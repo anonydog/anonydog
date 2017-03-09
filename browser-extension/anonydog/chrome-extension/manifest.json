@@ -9,9 +9,9 @@
             "*://github.com/*/compare/*"
         ],
         "js": [
+            "browser-polyfill.min.js",
             "anonydog.js"
-        ],
-        "run_at": "document_start"
+        ]
     }],
     "permissions": [
         "*://*.anonydog.org/",
