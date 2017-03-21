@@ -12,6 +12,7 @@ packages:
   - cmake
   - pkg-config
   - git
+  - nginx
 
 # run commands
 # default: none
@@ -28,4 +29,11 @@ packages:
 # any characters yaml would eat (':' can be problematic)
 runcmd:
  - [ git, "clone", "https://github.com/anonydog/anonydog.git", "/tmp/anonydog" ]
+ # TODO: I'm sure I'm abusing cloud-init here, but...
+ - [ cp, "/tmp/anonydog/deploy/nginx/webapp.anonydog", "/etc/nginx/sites-available/webapp.anonydog" ]
+ - [ cp, "/tmp/anonydog/deploy/nginx/webhook.anonydog", "/etc/nginx/sites-available/webhook.anonydog" ]
+ - [ ln, "-s", "/etc/nginx/sites-available/webapp.anonydog", "/etc/nginx/sites-enabled/webapp.anonydog" ]
+ - [ ln, "-s", "/etc/nginx/sites-available/webhook.anonydog", "/etc/nginx/sites-enabled/webhook.anonydog" ]
+ - [ service, "nginx", "restart" ]
  - [ env, "BUNDLE_GEMFILE=/tmp/anonydog/worker/Gemfile", "bundle", "install" ]
+ # and then start the sinatra apps manually... for the time being... :-)
