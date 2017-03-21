@@ -1,5 +1,5 @@
 server {
-    listen 80;
+    listen 80; # TODO: https (when in prod)
     server_name webhook.dev.anonydog.org;
     location / {
         #TODO: need to keep port number in sync with deploy/scripts/webhook.sh

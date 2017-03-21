@@ -29,7 +29,6 @@ GITHUB_WEBHOOK_SECRET=`openssl enc -aes-256-cbc -d -in $SELECTED_ENV_DIR/github_
 GITHUB_SSH_KEY_PATH="$SELECTED_ENV_DIR/ssh_key"
 GITHUB_SSH_KEY_PASSPHRASE='' # Using empty passphrase for now. Rugged does not seem to support password-protected keys
 
-# FIXME: ssl and multihos
 env GITHUB_API_ACCESS_TOKEN=$GITHUB_API_ACCESS_TOKEN \
     GITHUB_WEBHOOK_SECRET=$GITHUB_WEBHOOK_SECRET \
     GITHUB_SSH_KEY_PATH=$GITHUB_SSH_KEY_PATH \
