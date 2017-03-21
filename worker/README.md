@@ -11,5 +11,6 @@ It mainly receives and reacts to two kinds of commands:
 
 Cheat Sheet for Development
 ----
+    $ sudo apt-get install libssh2-1 libssh2-1-dev # needed for rugged
     $ bundle update
     $ bundle exec rake test
