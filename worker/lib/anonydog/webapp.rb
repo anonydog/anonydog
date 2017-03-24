@@ -23,7 +23,6 @@ module Anonydog
           active: true
         }
       )
-      github_api.edit(forked_repo.full_name, name: "#{params[:user]}-#{params[:repo]}")
 
       "ok"
     end
