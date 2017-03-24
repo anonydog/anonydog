@@ -8,11 +8,6 @@ module Anonydog
       user = params[:user]
       repo = params[:repo]
 
-# ^^^ webapp  (queue producer) ^^^
-# --------------------------------
-# vvv worker  (queue consumer) vvv
-
-      # FIXME push message to queue
       github_api = Octokit::Client.new(access_token: ENV['GITHUB_API_ACCESS_TOKEN'])
       forked_repo = github_api.fork("#{user}/#{repo}")
 

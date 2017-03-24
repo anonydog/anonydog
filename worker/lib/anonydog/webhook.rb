@@ -50,10 +50,6 @@ module Anonydog
       "opened" == event["action"] && !event["pull_request"].nil?
     end
 
-# ^^^ webhook (queue producer) ^^^
-# --------------------------------
-# vvv worker  (queue consumer) vvv
-
     def do_anonymize(pull_request)
       anonref = Anonydog::Local.publish_anonymized(
         pull_request[:base][:clone_url], pull_request[:base][:commit_sha],
