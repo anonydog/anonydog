@@ -37,7 +37,6 @@ module Anonydog
       pull_request[:head][:clone_url] = event["pull_request"]["head"]["repo"]["clone_url"]
       pull_request[:head][:commit_sha] = event["pull_request"]["head"]["sha"]
 
-      #FIXME: push message to queue
       do_anonymize(pull_request)
     end
 
