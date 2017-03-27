@@ -180,7 +180,10 @@ var augmentPullRequestPage = function(github_pr_button, env) {
     compare_page_request.send();
   };
 
-  //document.querySelector("#anonydog-pr").addEventListener("click", deflect_pr);
+  var traditional_pr = () => document.querySelector("form#new_pull_request").submit();
+
+  document.querySelector("#anonydog-pr-button").addEventListener("click", deflect_pr);
+  document.querySelector("#github-pr-button").addEventListener("click", traditional_pr);
 };
 
 waitFor(
