@@ -3,4 +3,4 @@ end
 
 require 'anonydog/local'
 require 'anonydog/webhook'
-require 'anonydog/webapp'
+require 'anonydog/webapp/webapp'

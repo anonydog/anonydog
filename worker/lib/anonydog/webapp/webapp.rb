@@ -40,25 +40,8 @@ module Anonydog
     end
 
     get "/fork" do
-      <<-END
-<html>
-  <body>
-    <form action="/fork" method="post">
-      <p>
-        <label for="user">User:</label>
-        <input type="text" name="user" value="thiagoarrais" />
-      </p>
-      <p>
-        <label for="repo">Repo:</label>
-        <input type="text" name="repo" />
-      </p>
-      <p>
-        <input type="submit" />
-      </p>
-    </form>
-  </body>
-</html>
-END
+      #TODO: can this be done by some middleware or something?
+      send_file File.expand_path('fork.html', settings.public_folder)
     end
 
     get "/" do
