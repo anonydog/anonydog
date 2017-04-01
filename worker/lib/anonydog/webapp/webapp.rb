@@ -11,7 +11,7 @@ module Anonydog
       forked_repo = github_api.fork(:owner => user, :repo => repo)
       do_create_hook(github_api, forked_repo.full_name, 100)
 
-      "ok"
+      redirect to('/instructions')
     end
 
     def do_create_hook(github_api, repo_name, wait)
@@ -42,6 +42,11 @@ module Anonydog
     get "/fork" do
       #TODO: can this be done by some middleware or something?
       send_file File.expand_path('fork.html', settings.public_folder)
+    end
+
+    get "/instructions" do
+      #TODO: can this be done by some middleware or something?
+      send_file File.expand_path('instructions.html', settings.public_folder)
     end
 
     get "/" do
