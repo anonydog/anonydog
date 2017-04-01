@@ -38,13 +38,14 @@ class AnonymizeTest < MiniTest::Test
       :base => {
         :clone_url => BASE_REPO_CLONE_URL,
         :commit => upstream_head
-      }
+      },
+      :anonymized_branch => 'pullrequest-12345'
     )
 
     anonymized_ref = anonymized_repo.head
 
     assert(anonymized_ref.branch?)
-    assert(anonymized_ref.name.start_with? 'refs/heads/pullrequest-')
+    assert_equal('refs/heads/pullrequest-12345', anonymized_ref.name)
 
     anonymized_commit = anonymized_ref.target
 
