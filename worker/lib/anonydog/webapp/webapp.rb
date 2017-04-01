@@ -9,14 +9,14 @@ module Anonydog
 
       github_api = Octokit::Client.new(access_token: ENV['GITHUB_API_ACCESS_TOKEN'])
       forked_repo = github_api.fork(:owner => user, :repo => repo)
-      do_create_hook(forked_repo.full_name, 100)
+      do_create_hook(github_api, forked_repo.full_name, 100)
 
       "ok"
     end
 
-    def do_create_hook(repo_name, wait)
+    def do_create_hook(github_api, repo_name, wait)
       begin
-        github_api.create_hook(forked_repo.full_name,
+        github_api.create_hook(repo_name,
           "web",
           {
             url: ENV['GITHUB_WEBHOOK_ENDPOINT'],
@@ -35,7 +35,7 @@ module Anonydog
         end
         puts "Github did not create the fork yet. Trying again in #{wait}ms..."
         sleep wait
-        do_create_hook(forked_repo.full_name, wait * 2)
+        do_create_hook(github_api, repo_name, wait * 2)
       end
     end
 
