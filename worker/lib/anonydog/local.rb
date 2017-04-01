@@ -45,8 +45,8 @@ module Anonydog
         :hide => merge_base) {
         |commit|
           fake_author_sig = {
-            :name => 'Scooby Doo',
-            :email => 'scooby@anonydog.org',
+            :name => 'Anonydog',
+            :email => 'me@anonydog.org',
             :time => commit.author[:time]
           }
 

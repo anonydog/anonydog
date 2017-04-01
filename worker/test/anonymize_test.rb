@@ -49,11 +49,11 @@ class AnonymizeTest < MiniTest::Test
 
     anonymized_commit = anonymized_ref.target
 
-    assert_equal("d7f088cdefb66fc12e401ecae5ac13be9ad5fd08", anonymized_commit.oid)
+    assert_equal("d4133014d4b8ed5e18f093f8aa404dc40d6caa19", anonymized_commit.oid)
     # check if all three commits were anonymized
     (1..3).each do |i|
-      assert_equal("Scooby Doo", anonymized_commit.author[:name], "commit author #{i}")
-      assert_equal("scooby@anonydog.org", anonymized_commit.author[:email], "commit author #{i}")
+      assert_equal("Anonydog", anonymized_commit.author[:name], "commit author #{i}")
+      assert_equal("me@anonydog.org", anonymized_commit.author[:email], "commit author #{i}")
       assert_equal(anonymized_commit.author[:name], anonymized_commit.committer[:name], "commit committer #{i}")
       assert_equal(anonymized_commit.author[:email], anonymized_commit.committer[:email], "commit committer #{i}")
 
