@@ -50,12 +50,8 @@ module Anonydog
     end
 
     get "/" do
-      <<-END
-<html>
-  <body>We're under construction. Go to <a href="/fork">/fork</a></body>
-</html>
-END
+      #TODO: can this be done by some middleware or something?
+      send_file File.expand_path('index.html', settings.public_folder)
     end
-
   end
 end
