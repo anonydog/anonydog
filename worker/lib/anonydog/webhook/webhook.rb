@@ -2,6 +2,8 @@ require "sinatra/base"
 require "json"
 require "octokit"
 
+require "anonydog/webhook/messages"
+
 module Anonydog
   class Webhook < Sinatra::Base
     get '/' do
@@ -56,15 +58,12 @@ module Anonydog
         pull_request[:base][:ssh_url]
       )
 
-      msg = "anonymized commits for #{pull_request[:url]} are at #{anonref}"
-
       github_api = Octokit::Client.new(access_token: ENV['GITHUB_API_ACCESS_TOKEN'])
-      github_api.post(pull_request[:comments_url], body: msg)
 
       bot_repo = github_api.repository(pull_request[:base][:repo_full_name])
       original_repo_name = bot_repo.parent["full_name"]
 
-      github_api.create_pull_request(
+      pr_created = github_api.create_pull_request(
         original_repo_name,
         "master",
         "#{pull_request[:base][:owner_login]}:#{anonref}",
@@ -72,7 +71,18 @@ module Anonydog
         pull_request[:body]
       )
 
-      puts msg
+      msg_template = "successful_pr.md"
+      msg_context = {
+        pr_number: pr_created["number"],
+        orig_repo_owner: pr_created["base"]["repo"]["owner"]["login"],
+        orig_repo_name: pr_created["base"]["repo"]["name"],
+        orig_repo_url: pr_created["base"]["repo"]["html_url"]
+      }
+
+      msg = Messages.render_file(msg_template, msg_context)
+
+      github_api.post(pull_request[:comments_url], body: msg)
+
       msg
     end
   end
