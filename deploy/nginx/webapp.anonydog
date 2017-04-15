@@ -1,3 +1,4 @@
+#FIXME: move to deploy/envs/arraisbot and adjust deploy procedure
 server {
     listen 80; # TODO: https (when in prod)
     server_name webapp.dev.anonydog.org;

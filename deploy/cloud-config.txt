@@ -4,6 +4,7 @@ apt_upgrade: true
 packages:
   - ruby
   - ruby-dev
+#TODO: lockfile is created by rubygems' bundler and read by ubuntu's
   - ruby-bundler
   - libssl-dev
   - libssh2-1
