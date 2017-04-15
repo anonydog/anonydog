@@ -17,19 +17,17 @@ module Anonydog
     end
 
     def queue
-      @queue ||= channel.queue("anonydog.fork", :auto_delete => true)
+      settings.queue
     end
 
-    def channel
-      @channel ||= connection.create_channel
-    end
+    configure do
+      #TODO: turn this into a proper object?
+      conn = Bunny.new(ENV['MESSAGE_QUEUE_URL'])
+      conn.start
+      channel = conn.create_channel
+      queue = channel.queue("anonydog.fork", :auto_delete => true)
 
-    def connection
-      if @conn.nil? then
-        @conn = Bunny.new(ENV['MESSAGE_QUEUE_URL'])
-        @conn.start
-      end
-      @conn
+      set :queue, queue
     end
 
     get "/fork" do
