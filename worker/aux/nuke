@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require 'octokit'
+
+api_token = ENV['GITHUB_API_ACCESS_TOKEN']
+
+github_api = Octokit::Client.new(access_token: api_token)
+own_login = github_api.user.login
+
+github_api.repos.each do |repo|
+  # github_api.repos lists repos all repos where we're members
+  # we only want to nuke our own repos
+  if repo.owner.login == own_login then
+    github_api.delete_repository("#{repo.owner.login}/#{repo.name}")
+  end
+end
+
+puts
