@@ -3,12 +3,16 @@ GEM
   specs:
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
+    amq-protocol (2.1.0)
+    bunny (2.6.4)
+      amq-protocol (>= 2.0.1)
     daemons (1.2.4)
     eventmachine (1.2.3)
     faraday (0.12.0.1)
       multipart-post (>= 1.2, < 3)
     json (2.0.3)
     minitest (5.10.1)
+    msgpack (1.1.0)
     multipart-post (2.0.0)
     mustache (1.0.5)
     octokit (4.7.0)
@@ -36,8 +40,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bunny (~> 2.6)
   json (~> 2.0)
   minitest (~> 5.10)
+  msgpack (~> 1.1)
   mustache (~> 1.0)
   octokit (~> 4.6)
   rake (~> 12.0)

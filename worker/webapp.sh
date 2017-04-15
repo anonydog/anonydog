@@ -2,16 +2,8 @@
 
 RACKUP_CONFIG=webapp.config.ru
 
-if [ -z ${GITHUB_API_ACCESS_TOKEN+x} ]; then
-  echo "need GITHUB_API_ACCESS_TOKEN"
-  exit
-fi
-if [ -z ${GITHUB_WEBHOOK_ENDPOINT+x} ]; then
-  echo "need GITHUB_WEBHOOK_ENDPOINT"
-  exit
-fi
-if [ -z ${GITHUB_WEBHOOK_SECRET+x} ]; then
-  echo "need GITHUB_WEBHOOK_SECRET"
+if [ -z ${MESSAGE_QUEUE_URL+x} ]; then
+  echo "need MESSAGE_QUEUE_URL"
   exit
 fi
 
