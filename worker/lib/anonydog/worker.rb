@@ -59,7 +59,7 @@ module Anonydog
           return
         end
         puts "Github did not create the fork yet. Trying again in #{wait}ms..."
-        sleep wait
+        sleep(wait.to_f/1000)
         do_create_hook(github_api, repo_name, wait * 2)
       end
     end
