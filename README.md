@@ -12,9 +12,9 @@ To use me:
 
 1. Go to https://anonydog.org/fork and tell me which github repo you want to
    work on.
-2. Instead of forking `anyuser/anyrepo`, fork `anonydog/anyuser-anyrepo`
+2. Instead of forking `anyuser/anyrepo`, fork `anonydog/anyrepo`
 3. Create a branch and work as you normally would
-4. When you're done, open a pull request to `anonydog/anyuser-anyrepo`
+4. When you're done, open a pull request to `anonydog/anyrepo`
 
 When I see that, I'll flip a magical coin and either (1) open the pull request
 to the original repo on your behalf or (2) strip your name from every possible
