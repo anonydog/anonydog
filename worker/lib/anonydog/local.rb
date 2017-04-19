@@ -1,5 +1,4 @@
 require 'rugged'
-require 'securerandom'
 
 module Anonydog
   class Local
@@ -86,10 +85,8 @@ module Anonydog
     def self.publish_anonymized(
       base_clone_url, base_commit,
       head_clone_url, head_commit,
-      publish_url
+      publish_url, anonbranch_name
     )
-
-      anonbranch_name = "pullrequest-#{SecureRandom.hex(4)}"
 
       anonrepo = Anonydog::Local.anonymize(
         base: { clone_url: base_clone_url, commit: base_commit },

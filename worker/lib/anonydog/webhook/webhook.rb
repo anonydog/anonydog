@@ -27,7 +27,7 @@ module Anonydog
 
       if is_open_pull_request(event) then
         pull_request = {}
-        pull_request[:url] = event["pull_request"]["url"]
+        pull_request[:url] = event["pull_request"]["html_url"]
         pull_request[:title] = event["pull_request"]["title"]
         pull_request[:body] = event["pull_request"]["body"]
         pull_request[:comments_url] = event["pull_request"]["comments_url"]
@@ -46,6 +46,7 @@ module Anonydog
         do_anonymize(pull_request)
       elsif is_synchronize_pull_request(event) then
         pull_request = {}
+        pull_request[:url] = event["pull_request"]["html_url"]
         pull_request[:comments_url] = event["pull_request"]["comments_url"]
 
         pull_request[:base] = {}
@@ -84,10 +85,15 @@ module Anonydog
     end
 
     def do_anonymize(pull_request)
-      anonref = Anonydog::Local.publish_anonymized(
+      received_pr_url = pull_request[:url]
+      branch_suffix = Digest::SHA256.hexdigest(received_pr_url).slice(0..8)
+      anonref = "pullrequest-#{branch_suffix}"
+
+      Anonydog::Local.publish_anonymized(
         pull_request[:base][:clone_url], pull_request[:base][:commit_sha],
         pull_request[:head][:clone_url], pull_request[:head][:commit_sha],
-        pull_request[:base][:ssh_url]
+        pull_request[:base][:ssh_url],
+        anonref
       )
 
       bot_repo = github_api.repository(pull_request[:base][:repo_full_name])
@@ -117,10 +123,15 @@ module Anonydog
     end
     
     def do_synchronize(pull_request)
+      received_pr_url = pull_request[:url]
+      branch_suffix = Digest::SHA256.hexdigest(received_pr_url).slice(0..8)
+      anonref = "pullrequest-#{branch_suffix}"
+
       Anonydog::Local.publish_anonymized_sync(
         pull_request[:base][:clone_url], pull_request[:base][:commit_sha],
         pull_request[:head][:clone_url], pull_request[:head][:commit_sha],
-        pull_request[:base][:ssh_url], 'pullrequest-717585d7'
+        pull_request[:base][:ssh_url],
+        anonref
       )
 
       msg_template = "sorry_no_additions.md"
