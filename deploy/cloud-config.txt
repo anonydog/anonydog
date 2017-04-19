@@ -32,8 +32,8 @@ packages:
 runcmd:
  - [ git, "clone", "https://github.com/anonydog/anonydog.git", "/tmp/anonydog" ]
  # TODO: I'm sure I'm abusing cloud-init here, but...
- - [ cp, "/tmp/anonydog/deploy/nginx/webapp.anonydog", "/etc/nginx/sites-available/webapp.anonydog" ]
- - [ cp, "/tmp/anonydog/deploy/nginx/webhook.anonydog", "/etc/nginx/sites-available/webhook.anonydog" ]
+ - [ cp, "/tmp/anonydog/deploy/envs/production/nginx/webapp.anonydog", "/etc/nginx/sites-available/webapp.anonydog" ]
+ - [ cp, "/tmp/anonydog/deploy/envs/production/nginx/webhook.anonydog", "/etc/nginx/sites-available/webhook.anonydog" ]
  - [ ln, "-s", "/etc/nginx/sites-available/webapp.anonydog", "/etc/nginx/sites-enabled/webapp.anonydog" ]
  - [ ln, "-s", "/etc/nginx/sites-available/webhook.anonydog", "/etc/nginx/sites-enabled/webhook.anonydog" ]
  - [ service, "nginx", "restart" ]
