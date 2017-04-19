@@ -105,5 +105,28 @@ module Anonydog
 
       anonbranch_name
     end
+
+    # Publishes anonymized branch to given URL. Returns randomly generated name
+    # for the anonymized ref (can be used to open the PR)
+    def self.publish_anonymized_sync(
+      base_clone_url, base_commit,
+      head_clone_url, head_commit,
+      publish_url, anonbranch_name
+    )
+
+      anonrepo = Anonydog::Local.anonymize(
+        base: { clone_url: base_clone_url, commit: base_commit },
+        head: { clone_url: head_clone_url, commit: head_commit },
+        anonymized_branch: anonbranch_name
+      )
+
+      Anonydog::Local.publish(anonrepo, publish_url)
+
+      #TODO: should we use an in-memory repo?
+      puts "deleting #{anonrepo.path}"
+      FileUtils.rm_rf(anonrepo.path)
+
+      anonbranch_name
+    end
   end
 end

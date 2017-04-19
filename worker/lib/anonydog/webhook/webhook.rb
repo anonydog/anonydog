@@ -2,6 +2,7 @@ require "sinatra/base"
 require "json"
 require "octokit"
 
+require "anonydog/local"
 require "anonydog/webhook/messages"
 
 module Anonydog
@@ -46,6 +47,16 @@ module Anonydog
       elsif is_synchronize_pull_request(event) then
         pull_request = {}
         pull_request[:comments_url] = event["pull_request"]["comments_url"]
+
+        pull_request[:base] = {}
+        pull_request[:base][:clone_url] = event["pull_request"]["base"]["repo"]["clone_url"]
+        pull_request[:base][:commit_sha] = event["pull_request"]["base"]["sha"]
+        pull_request[:base][:ssh_url] = event["pull_request"]["base"]["repo"]["ssh_url"]
+
+        pull_request[:head] = {}
+        pull_request[:head][:clone_url] = event["pull_request"]["head"]["repo"]["clone_url"]
+        pull_request[:head][:commit_sha] = event["pull_request"]["head"]["sha"]
+
         do_synchronize(pull_request)
       end
     end
@@ -106,6 +117,12 @@ module Anonydog
     end
     
     def do_synchronize(pull_request)
+      Anonydog::Local.publish_anonymized_sync(
+        pull_request[:base][:clone_url], pull_request[:base][:commit_sha],
+        pull_request[:head][:clone_url], pull_request[:head][:commit_sha],
+        pull_request[:base][:ssh_url], 'pullrequest-717585d7'
+      )
+
       msg_template = "sorry_no_additions.md"
       msg_context = {}
       msg = Messages.render_file(msg_template, msg_context)

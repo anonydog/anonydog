@@ -2,13 +2,15 @@
 # encoding: US-ASCII
 
 require 'minitest/autorun'
-require 'anonydog'
+require 'anonydog/local' # FIXME A05E92A2: i'd like to just 'require anonydog'
 
 class AnonymizeTest < MiniTest::Test
   # repo layout for reference
   #
   #   maintainer/
   #     master    contributor
+  #       |          /
+  #       |         o bf6a
   #       |        /
   #  c118 o       o 1c1c
   #       |      /
@@ -50,7 +52,7 @@ class AnonymizeTest < MiniTest::Test
     anonymized_commit = anonymized_ref.target
 
     assert_equal("d4133014d4b8ed5e18f093f8aa404dc40d6caa19", anonymized_commit.oid)
-    # check if all three commits were anonymized
+    # traverse (three) commits starting from most recent
     (1..3).each do |i|
       assert_equal("Anonydog", anonymized_commit.author[:name], "commit author #{i}")
       assert_equal("me@anonydog.org", anonymized_commit.author[:email], "commit author #{i}")
@@ -66,5 +68,33 @@ class AnonymizeTest < MiniTest::Test
     assert_equal("487958f50bc90109f3b1ed89701894b1fe5a03ee", upstream_commit.oid, "unexpected merge base")
     assert_equal("Thiago Arrais", upstream_commit.author[:name])
     assert_equal("thiago.arrais@gmail.com", upstream_commit.author[:email])
+  end
+
+  def test_commits_added
+    # let's say the contributor added some commits to the PR...
+    upstream_head = 'c118828dd9d5669da9755a03b03f1a240a71864d'
+    pr_head = 'bf6abb8eacd0f6eb5b373b221ac46fc36d341079'
+
+    anonymized_repo = Anonydog::Local.anonymize(
+      :head => {
+        :clone_url => HEAD_REPO_CLONE_URL,
+        :commit => pr_head
+      },
+      :base => {
+        :clone_url => BASE_REPO_CLONE_URL,
+        :commit => upstream_head
+      },
+      :anonymized_branch => 'pullrequest-12345'
+    )
+
+    anonymized_commit = anonymized_repo.head.target
+
+    # we're not interested in the tip/head commit. we believe it is correctly
+    # anonymized. we're interested in its parent instead.
+    parent_commit = anonymized_commit.parents[0]
+
+    # but did its parent get anonymized to the same sha-256 as when it was the
+    # branch tip? or will it look to the PR reviewer as a rewriting of history?
+    assert_equal("d4133014d4b8ed5e18f093f8aa404dc40d6caa19", parent_commit.oid)
   end
 end
