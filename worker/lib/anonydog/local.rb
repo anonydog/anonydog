@@ -76,8 +76,10 @@ module Anonydog
         privatekey: File.expand_path("#{ENV['GITHUB_SSH_KEY_PATH']}"),
         username: 'git')
 
+      # see @nulltoken's response to @timmixture at https://github.com/libgit2/libgit2sharp/issues/104#issuecomment-26504318
+      force_push_ref = '+' + local_repo.head.name
       remote = local_repo.remotes.create_anonymous(remote_repo_url)
-      remote.push([local_repo.head.name], {credentials: creds})
+      remote.push([force_push_ref], {credentials: creds})
     end
 
     # Publishes anonymized branch to given URL. Returns randomly generated name
