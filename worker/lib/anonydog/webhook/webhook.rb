@@ -134,13 +134,7 @@ module Anonydog
         anonref
       )
 
-      msg_template = "sorry_no_additions.md"
-      msg_context = {}
-      msg = Messages.render_file(msg_template, msg_context)
-
-      github_api.post(pull_request[:comments_url], body: msg)
-      
-      msg
+      "ok"
     end
   end
 end
