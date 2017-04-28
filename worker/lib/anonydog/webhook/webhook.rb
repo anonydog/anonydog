@@ -26,6 +26,9 @@ module Anonydog
       return "ignored" if !is_interested_in(event)
 
       if is_open_pull_request(event) then
+        # TODO: all this translating isn't very useful. get rid of it.
+        # the schema coincides with the schema from octokit anyway. by adding
+        # our own translation layer, we're only introducing complexity
         pull_request = {}
         pull_request[:url] = event["pull_request"]["html_url"]
         pull_request[:title] = event["pull_request"]["title"]
@@ -34,6 +37,7 @@ module Anonydog
   
         pull_request[:base] = {}
         pull_request[:base][:clone_url] = event["pull_request"]["base"]["repo"]["clone_url"]
+        pull_request[:base][:ref] = event["pull_request"]["base"]["ref"]
         pull_request[:base][:commit_sha] = event["pull_request"]["base"]["sha"]
         pull_request[:base][:ssh_url] = event["pull_request"]["base"]["repo"]["ssh_url"]
         pull_request[:base][:owner_login] = event["pull_request"]["base"]["repo"]["owner"]["login"]
@@ -51,8 +55,10 @@ module Anonydog
 
         pull_request[:base] = {}
         pull_request[:base][:clone_url] = event["pull_request"]["base"]["repo"]["clone_url"]
+        pull_request[:base][:ref] = event["pull_request"]["base"]["ref"]
         pull_request[:base][:commit_sha] = event["pull_request"]["base"]["sha"]
         pull_request[:base][:ssh_url] = event["pull_request"]["base"]["repo"]["ssh_url"]
+        pull_request[:base][:repo_full_name] = event["pull_request"]["base"]["repo"]["full_name"]
 
         pull_request[:head] = {}
         pull_request[:head][:clone_url] = event["pull_request"]["head"]["repo"]["clone_url"]
@@ -89,18 +95,18 @@ module Anonydog
       branch_suffix = Digest::SHA256.hexdigest(received_pr_url).slice(0..8)
       anonref = "pullrequest-#{branch_suffix}"
 
+      bot_repo = github_api.repository(pull_request[:base][:repo_full_name])
+      original_repo = github_api.repository(bot_repo.parent["full_name"])
+
       Anonydog::Local.publish_anonymized(
-        pull_request[:base][:clone_url], pull_request[:base][:commit_sha],
+        original_repo["clone_url"], pull_request[:base][:ref],
         pull_request[:head][:clone_url], pull_request[:head][:commit_sha],
         pull_request[:base][:ssh_url],
         anonref
       )
 
-      bot_repo = github_api.repository(pull_request[:base][:repo_full_name])
-      original_repo_name = bot_repo.parent["full_name"]
-
       pr_created = github_api.create_pull_request(
-        original_repo_name,
+        original_repo["full_name"],
         "master",
         "#{pull_request[:base][:owner_login]}:#{anonref}",
         pull_request[:title],
@@ -127,8 +133,11 @@ module Anonydog
       branch_suffix = Digest::SHA256.hexdigest(received_pr_url).slice(0..8)
       anonref = "pullrequest-#{branch_suffix}"
 
+      bot_repo = github_api.repository(pull_request[:base][:repo_full_name])
+      original_repo = github_api.repository(bot_repo.parent["full_name"])
+
       Anonydog::Local.publish_anonymized_sync(
-        pull_request[:base][:clone_url], pull_request[:base][:commit_sha],
+        original_repo["clone_url"], pull_request[:base][:ref],
         pull_request[:head][:clone_url], pull_request[:head][:commit_sha],
         pull_request[:base][:ssh_url],
         anonref

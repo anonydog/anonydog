@@ -29,7 +29,7 @@ class AnonymizeTest < MiniTest::Test
     # non ff PR (needs to identify merge base)
     # contributor repo is not up-to-date (needs to fetch upstream)
 
-    upstream_head = 'c118828dd9d5669da9755a03b03f1a240a71864d'
+    upstream_ref = 'master'
     pr_head = '1c1ccfe285676856ae719d27e9e90aaff23d42db'
 
     anonymized_repo = Anonydog::Local.anonymize(
@@ -39,7 +39,7 @@ class AnonymizeTest < MiniTest::Test
       },
       :base => {
         :clone_url => BASE_REPO_CLONE_URL,
-        :commit => upstream_head
+        :ref => upstream_ref
       },
       :anonymized_branch => 'pullrequest-12345'
     )
@@ -72,7 +72,7 @@ class AnonymizeTest < MiniTest::Test
 
   def test_commits_added
     # let's say the contributor added some commits to the PR...
-    upstream_head = 'c118828dd9d5669da9755a03b03f1a240a71864d'
+    upstream_ref = 'master'
     pr_head = 'bf6abb8eacd0f6eb5b373b221ac46fc36d341079'
 
     anonymized_repo = Anonydog::Local.anonymize(
@@ -82,7 +82,7 @@ class AnonymizeTest < MiniTest::Test
       },
       :base => {
         :clone_url => BASE_REPO_CLONE_URL,
-        :commit => upstream_head
+        :ref => upstream_ref
       },
       :anonymized_branch => 'pullrequest-12345'
     )

@@ -21,7 +21,7 @@ module Anonydog
       head_commit = opts[:head][:commit]
 
       base_repo_clone_url = opts[:base][:clone_url]
-      base_commit = opts[:base][:commit]
+      base_ref = "upstream/#{opts[:base][:ref]}"
 
       branch_name = opts[:anonymized_branch]
 
@@ -35,7 +35,7 @@ module Anonydog
       repo.remotes.create('upstream', base_repo_clone_url)
       repo.fetch('upstream')
 
-      new_head = merge_base = repo.merge_base(head_commit, base_commit)
+      new_head = merge_base = repo.merge_base(head_commit, base_ref)
 
       Rugged::Walker.walk(
         repo,
@@ -85,13 +85,13 @@ module Anonydog
     # Publishes anonymized branch to given URL. Returns randomly generated name
     # for the anonymized ref (can be used to open the PR)
     def self.publish_anonymized(
-      base_clone_url, base_commit,
+      base_clone_url, base_ref,
       head_clone_url, head_commit,
       publish_url, anonbranch_name
     )
 
       anonrepo = Anonydog::Local.anonymize(
-        base: { clone_url: base_clone_url, commit: base_commit },
+        base: { clone_url: base_clone_url, ref: base_ref },
         head: { clone_url: head_clone_url, commit: head_commit },
         anonymized_branch: anonbranch_name
       )
@@ -108,13 +108,13 @@ module Anonydog
     # Publishes anonymized branch to given URL. Returns randomly generated name
     # for the anonymized ref (can be used to open the PR)
     def self.publish_anonymized_sync(
-      base_clone_url, base_commit,
+      base_clone_url, base_ref,
       head_clone_url, head_commit,
       publish_url, anonbranch_name
     )
 
       anonrepo = Anonydog::Local.anonymize(
-        base: { clone_url: base_clone_url, commit: base_commit },
+        base: { clone_url: base_clone_url, ref: base_ref },
         head: { clone_url: head_clone_url, commit: head_commit },
         anonymized_branch: anonbranch_name
       )
