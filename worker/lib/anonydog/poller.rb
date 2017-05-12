@@ -1,9 +1,14 @@
 require 'octokit'
+require 'redis'
 
 module Anonydog
   class Poller
     def github_api
       @github_api ||= Octokit::Client.new(access_token: ENV['GITHUB_API_ACCESS_TOKEN'])
+    end
+
+    def redis
+      @redis ||= Redis.new(url: ENV['REDIS_DATABASE_URL'])
     end
 
     def poll_for_pr_comments
@@ -33,7 +38,6 @@ module Anonydog
       end
     end
 
-    #FIXME: need a proper database
     def already_relayed
       @already_relayed ||= %w{
       }
@@ -43,26 +47,35 @@ module Anonydog
       # the pull request the bot authored (on the upstream repo)
       bot_pull_request_url = thread[:subject][:url]
 
-      #FIXME: hardcoded
-      bot_repo = "arraisbot/personal-toolbox"
-      bot_issue = 2
+      botpr = redis.hgetall("botpr:#{bot_pull_request_url}")
+      bot_repo = botpr['bot_repo']
+      bot_issue = botpr['bot_repo_issue']
 
       bot_pull_request = github_api.get(bot_pull_request_url)
 
       original_comments_url = bot_pull_request[:comments_url]
 
       original_comments = github_api.get(original_comments_url)
-      original_comments.each do |comment|
-        username = comment[:user][:login]
-        body = comment[:body]
-        original_url = comment[:html_url]
-        opaque_id = comment[:url]
-        if !already_relayed.include?(opaque_id) then
+
+      #FIXME: memory leak
+      already_relayed.concat(redis.smembers("botpr:comments_already_relayed:#{bot_pull_request_url}"))
+
+      original_comments.
+        select do |comment|
+          opaque_id = comment[:url]
+          !already_relayed.include? opaque_id
+        end.
+        each do |comment|
+          username = comment[:user][:login]
+          body = comment[:body]
+          original_url = comment[:html_url]
+          opaque_id = comment[:url]
+
           msg = "[#{username} said](#{original_url}):\n\n#{body}"
           github_api.add_comment(bot_repo, bot_issue, msg)
           already_relayed.push(opaque_id)
+          redis.sadd("botpr:comments_already_relayed:#{bot_pull_request_url}", opaque_id)
         end
-      end
     end
   end
 end

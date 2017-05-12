@@ -22,6 +22,7 @@ GEM
     rack-protection (1.5.3)
       rack
     rake (12.0.0)
+    redis (3.3.3)
     rugged (0.25.1.1)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
@@ -47,6 +48,7 @@ DEPENDENCIES
   mustache (~> 1.0)
   octokit (~> 4.6)
   rake (~> 12.0)
+  redis (~> 3.3)
   rugged (~> 0.25)
   sinatra (~> 1.4)
   thin (~> 1.7)
