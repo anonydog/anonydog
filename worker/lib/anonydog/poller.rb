@@ -7,6 +7,7 @@ module Anonydog
     end
 
     def poll_for_pr_comments
+      poll_interval = 60
       last_modified_tag = ''
       while true do
         threads = github_api.notifications(
@@ -19,7 +20,7 @@ module Anonydog
 
         http_response = github_api.last_response
 
-        poll_interval = http_response.headers['X-Poll-Interval'].to_i
+        poll_interval = (http_response.headers['X-Poll-Interval'] || poll_interval).to_i
         last_modified_tag = http_response.headers['Last-Modified'] || last_modified_tag
 
         threads.each do |thread|
