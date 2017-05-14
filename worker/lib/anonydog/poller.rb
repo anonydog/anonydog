@@ -39,11 +39,6 @@ module Anonydog
       end
     end
 
-    def already_relayed
-      @already_relayed ||= %w{
-      }
-    end
-
     def do_process_thread(thread)
       # the pull request the bot authored (on the upstream repo)
       bot_pull_request_url = thread[:subject][:url]
@@ -52,7 +47,7 @@ module Anonydog
       bot_repo = botpr['bot_repo']
       bot_issue = botpr['bot_repo_issue']
 
-      comments_already_relayed_for_this_pull_request = redis.smembers("botpr:comments_already_relayed:#{bot_pull_request_url}")
+      already_relayed = redis.smembers("botpr:comments_already_relayed:#{bot_pull_request_url}")
 
       if [bot_pull_request_url, botpr, bot_repo, bot_issue].any?(&:nil?) then
         puts "cannot process #{thread[:url]}. something is missing."
@@ -75,9 +70,6 @@ module Anonydog
       original_comments_url = bot_pull_request[:comments_url]
 
       original_comments = github_api.get(original_comments_url)
-
-      #FIXME: memory leak
-      already_relayed.concat(comments_already_relayed_for_this_pull_request)
 
       original_comments.
         select do |comment|
