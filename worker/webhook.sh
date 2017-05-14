@@ -14,6 +14,10 @@ if [ -z ${GITHUB_SSH_KEY_PATH+x} ]; then
   echo "need GITHUB_SSH_KEY_PATH"
   exit
 fi
+if [ -z ${REDIS_DATABASE_URL+x} ]; then
+  echo "need REDIS_DATABASE_URL"
+  exit
+fi
 
 WORK_DIR=$(cd "$(dirname "$0")"; pwd)
 BUNDLE_GEMFILE=$WORK_DIR/Gemfile

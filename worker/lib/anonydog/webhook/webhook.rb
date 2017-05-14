@@ -1,6 +1,7 @@
 require "sinatra/base"
 require "json"
 require "octokit"
+require "redis"
 
 require "anonydog/local"
 require "anonydog/webhook/messages"
@@ -33,6 +34,7 @@ module Anonydog
         pull_request[:url] = event["pull_request"]["html_url"]
         pull_request[:title] = event["pull_request"]["title"]
         pull_request[:body] = event["pull_request"]["body"]
+        pull_request[:number] = event["pull_request"]["number"]
         pull_request[:comments_url] = event["pull_request"]["comments_url"]
   
         pull_request[:base] = {}
@@ -113,6 +115,12 @@ module Anonydog
         pull_request[:body]
       )
 
+      redis.hmset(
+        "botpr:#{pr_created.url}",
+          "bot_repo", bot_repo.full_name,
+          "bot_repo_issue", pull_request[:number]
+      )
+
       msg_template = "successful_pr.md"
       msg_context = {
         pr_number: pr_created["number"],
@@ -144,6 +152,10 @@ module Anonydog
       )
 
       "ok"
+    end
+
+    def redis
+      @redis ||= Redis.new(url: ENV['REDIS_DATABASE_URL'])
     end
   end
 end
