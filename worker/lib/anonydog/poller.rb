@@ -29,9 +29,10 @@ module Anonydog
         last_modified_tag = http_response.headers['Last-Modified'] || last_modified_tag
 
         threads.each do |thread|
-          do_process_thread(thread)
-          puts "Processed thread #{thread[:url]}"
-          github_api.mark_thread_as_read(thread[:id])
+          if do_process_thread(thread) then
+            puts "Processed thread #{thread[:url]}"
+            github_api.mark_thread_as_read(thread[:id])
+          end
         end
 
         sleep poll_interval
@@ -51,6 +52,24 @@ module Anonydog
       bot_repo = botpr['bot_repo']
       bot_issue = botpr['bot_repo_issue']
 
+      comments_already_relayed_for_this_pull_request = redis.smembers("botpr:comments_already_relayed:#{bot_pull_request_url}")
+
+      if [bot_pull_request_url, botpr, bot_repo, bot_issue].any?(&:nil?) then
+        puts "cannot process #{thread[:url]}. something is missing."
+        puts "bot_pull_request_url: #{bot_pull_request_url}"
+        puts "botpr: #{botpr}"
+        puts "bot_repo: #{bot_repo}"
+        puts "bot_issue: #{bot_issue}"
+        return false
+      end
+
+      # TODO:
+      # ^^^^^^^^^^^^^
+      # clerical work
+      # -------------
+      # real stuff
+      # vvvvvvvvvvvvv
+
       bot_pull_request = github_api.get(bot_pull_request_url)
 
       original_comments_url = bot_pull_request[:comments_url]
@@ -58,7 +77,7 @@ module Anonydog
       original_comments = github_api.get(original_comments_url)
 
       #FIXME: memory leak
-      already_relayed.concat(redis.smembers("botpr:comments_already_relayed:#{bot_pull_request_url}"))
+      already_relayed.concat(comments_already_relayed_for_this_pull_request)
 
       original_comments.
         select do |comment|
@@ -76,6 +95,8 @@ module Anonydog
           already_relayed.push(opaque_id)
           redis.sadd("botpr:comments_already_relayed:#{bot_pull_request_url}", opaque_id)
         end
+
+      return true
     end
   end
 end
