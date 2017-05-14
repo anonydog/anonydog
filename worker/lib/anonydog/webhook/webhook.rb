@@ -67,6 +67,11 @@ module Anonydog
         pull_request[:head][:commit_sha] = event["pull_request"]["head"]["sha"]
 
         do_synchronize(pull_request)
+      elsif is_create_comment(event) then
+        comment = {}
+        comment[:body] = event["comment"]["body"]
+        comment[:pull_request_url] = event["issue"]["pull_request"]["html_url"]
+        do_relay(comment)
       end
     end
 
@@ -77,7 +82,8 @@ module Anonydog
 
     def is_interested_in(event)
       is_open_pull_request(event) ||
-      is_synchronize_pull_request(event)
+      is_synchronize_pull_request(event) ||
+      is_create_comment(event)
     end
 
     def is_open_pull_request(event)
@@ -88,6 +94,10 @@ module Anonydog
       "synchronize" == event["action"] && !event["pull_request"].nil?
     end
     
+    def is_create_comment(event)
+      "created" == event["action"] && !event["comment"].nil? && !event["issue"].nil?
+    end
+
     def github_api
       @github_api ||= Octokit::Client.new(access_token: ENV['GITHUB_API_ACCESS_TOKEN'])
     end
@@ -121,6 +131,12 @@ module Anonydog
           "bot_repo_issue", pull_request[:number]
       )
 
+      redis.hmset(
+        "contributorpr:#{pull_request[:url]}",
+          "upstream_repo", pr_created["base"]["repo"]["full_name"],
+          "upstream_issue", pr_created["number"]
+      )
+
       msg_template = "successful_pr.md"
       msg_context = {
         pr_number: pr_created["number"],
@@ -150,6 +166,17 @@ module Anonydog
         pull_request[:base][:ssh_url],
         anonref
       )
+
+      "ok"
+    end
+
+    def do_relay(comment)
+      pull_request = redis.hgetall("contributorpr:#{comment[:pull_request_url]}")
+
+      upstream_repo = pull_request["upstream_repo"]
+      upstream_issue = pull_request["upstream_issue"]
+
+      github_api.add_comment(upstream_repo, upstream_issue, comment[:body])
 
       "ok"
     end
