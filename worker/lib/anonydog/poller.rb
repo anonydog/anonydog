@@ -11,6 +11,10 @@ module Anonydog
       @redis ||= Redis.new(url: ENV['REDIS_DATABASE_URL'])
     end
 
+    def my_login
+      @my_login ||= github_api.user.login
+    end
+
     def poll_for_pr_comments
       poll_interval = 60
       last_modified_tag = ''
@@ -75,6 +79,10 @@ module Anonydog
         select do |comment|
           opaque_id = comment[:url]
           !already_relayed.include? opaque_id
+        end.
+        select do |comment|
+          # comment is not from the bot itself
+          comment[:user][:login] != my_login
         end.
         each do |comment|
           username = comment[:user][:login]
