@@ -69,8 +69,10 @@ module Anonydog
         do_synchronize(pull_request)
       elsif is_create_comment(event) then
         comment = {}
+        comment[:author] = event["comment"]["user"]["login"]
         comment[:body] = event["comment"]["body"]
         comment[:pull_request_url] = event["issue"]["pull_request"]["html_url"]
+        comment[:pull_request_author] = event["issue"]["user"]["login"]
         do_relay(comment)
       end
     end
@@ -171,6 +173,9 @@ module Anonydog
     end
 
     def do_relay(comment)
+      #gate check: is this a comment from the original author of the PR?
+      return "not a comment from author. won't relay." if comment[:author] != comment[:pull_request_author]
+
       pull_request = redis.hgetall("contributorpr:#{comment[:pull_request_url]}")
 
       upstream_repo = pull_request["upstream_repo"]

@@ -48,7 +48,7 @@ module Anonydog
             content_type: 'json'
           },
           {
-            events: ['pull_request'],
+            events: ['pull_request', 'issue_comment'],
             active: true
           }
         )
