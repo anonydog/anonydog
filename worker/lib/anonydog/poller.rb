@@ -1,5 +1,7 @@
 require 'octokit'
-require 'redis'
+
+require 'anonydog/data/comments_repo'
+require 'anonydog/data/pull_request_repo'
 
 module Anonydog
   class Poller
@@ -7,8 +9,12 @@ module Anonydog
       @github_api ||= Octokit::Client.new(access_token: ENV['GITHUB_API_ACCESS_TOKEN'])
     end
 
-    def redis
-      @redis ||= Redis.new(url: ENV['REDIS_DATABASE_URL'])
+    def pr_repo
+      @pr_repo ||= Data::PullRequestRepo.new
+    end
+
+    def comments_repo
+      @comments_repo ||= Data::CommentsRepo.new
     end
 
     def my_login
@@ -47,11 +53,11 @@ module Anonydog
       # the pull request the bot authored (on the upstream repo)
       bot_pull_request_url = thread[:subject][:url]
 
-      botpr = redis.hgetall("botpr:#{bot_pull_request_url}")
+      botpr = pr_repo.contributor_pull_request(bot_pull_request_url)
       bot_repo = botpr['bot_repo']
       bot_issue = botpr['bot_repo_issue']
 
-      already_relayed = redis.smembers("botpr:comments_already_relayed:#{bot_pull_request_url}")
+      already_relayed = comments_repo.comments_already_relayed(bot_pull_request_url)
 
       if [bot_pull_request_url, botpr, bot_repo, bot_issue].any?(&:nil?) then
         puts "cannot process #{thread[:url]}. something is missing."
@@ -93,7 +99,7 @@ module Anonydog
           msg = "[#{username} said](#{original_url}):\n\n#{body}"
           github_api.add_comment(bot_repo, bot_issue, msg)
           already_relayed.push(opaque_id)
-          redis.sadd("botpr:comments_already_relayed:#{bot_pull_request_url}", opaque_id)
+          comments_repo.mark_comment_as_relayed(bot_pull_request_url, opaque_id)
         end
 
       return true

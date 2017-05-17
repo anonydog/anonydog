@@ -1,9 +1,9 @@
 require "sinatra/base"
 require "json"
 require "octokit"
-require "redis"
 
 require "anonydog/local"
+require "anonydog/data/pull_request_repo"
 require "anonydog/webhook/messages"
 
 module Anonydog
@@ -127,16 +127,17 @@ module Anonydog
         pull_request[:body]
       )
 
-      redis.hmset(
-        "botpr:#{pr_created.url}",
-          "bot_repo", bot_repo.full_name,
-          "bot_repo_issue", pull_request[:number]
-      )
-
-      redis.hmset(
-        "contributorpr:#{pull_request[:url]}",
-          "upstream_repo", pr_created["base"]["repo"]["full_name"],
-          "upstream_issue", pr_created["number"]
+      pr_repo.store_mapping(
+        :botpr_url => pr_created.url,
+        :contributorpr_url => pull_request[:url],
+        :contributorpr => {
+          :repo => bot_repo.full_name,
+          :issue => pull_request[:number]
+        },
+        :botpr => {
+          :repo => pr_created["base"]["repo"]["full_name"],
+          :issue => pr_created["number"]
+        }
       )
 
       msg_template = "successful_pr.md"
@@ -176,7 +177,7 @@ module Anonydog
       #gate check: is this a comment from the original author of the PR?
       return "not a comment from author. won't relay." if comment[:author] != comment[:pull_request_author]
 
-      pull_request = redis.hgetall("contributorpr:#{comment[:pull_request_url]}")
+      pull_request = pr_repo.bot_pull_request(comment[:pull_request_url])
 
       upstream_repo = pull_request["upstream_repo"]
       upstream_issue = pull_request["upstream_issue"]
@@ -186,8 +187,8 @@ module Anonydog
       "ok"
     end
 
-    def redis
-      @redis ||= Redis.new(url: ENV['REDIS_DATABASE_URL'])
+    def pr_repo
+      @pr_repo ||= Data::PullRequestRepo.new
     end
   end
 end
