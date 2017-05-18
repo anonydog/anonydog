@@ -78,10 +78,12 @@ module Anonydog
       bot_pull_request = github_api.get(bot_pull_request_url)
 
       original_comments_url = bot_pull_request[:comments_url]
+      original_review_comments_url = bot_pull_request[:review_comments_url]
 
       original_comments = github_api.get(original_comments_url)
+      original_review_comments = github_api.get(original_review_comments_url)
 
-      original_comments.
+      original_comments.concat(original_review_comments).
         select do |comment|
           opaque_id = comment[:url]
           !already_relayed.include? opaque_id
@@ -96,8 +98,26 @@ module Anonydog
           original_url = comment[:html_url]
           opaque_id = comment[:url]
 
+          # ^^^^^^^^^^^^^^^^^^^^
+          #       common
+          # --------------------
+          # review comments only
+          # vvvvvvvvvvvvvvvvvvvv
+          commit_id = 'b3097adc80abdfe0398017d9d631a286ee8d9895' #FIXME: hardcoded
+          path = comment[:path]
+          position = comment[:position]
+          # ^^^^^^^^^^^^^^^^^^^^
+          # review comments only
+          # --------------------
+          #       common
+          # vvvvvvvvvvvvvvvvvvvv
+
           msg = "[#{username} said](#{original_url}):\n\n#{body}"
-          github_api.add_comment(bot_repo, bot_issue, msg)
+          if !position.nil? then # we're dealing with a review comment here
+            github_api.create_pull_request_comment(bot_repo, bot_issue, msg, commit_id, path, position)
+          else
+            github_api.add_comment(bot_repo, bot_issue, msg)
+          end
           already_relayed.push(opaque_id)
           comments_repo.mark_comment_as_relayed(bot_pull_request_url, opaque_id)
         end
