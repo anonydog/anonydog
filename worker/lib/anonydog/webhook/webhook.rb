@@ -73,8 +73,15 @@ module Anonydog
         comment = {}
         comment[:author] = event["comment"]["user"]["login"]
         comment[:body] = event["comment"]["body"]
-        comment[:pull_request_url] = event["issue"]["pull_request"]["html_url"]
-        comment[:pull_request_author] = event["issue"]["user"]["login"]
+        if !event["issue"].nil? then
+          comment[:pull_request_url] = event["issue"]["pull_request"]["url"]
+          comment[:pull_request_author] = event["issue"]["user"]["login"]
+        else
+          comment[:pull_request_url] = event["pull_request"]["url"]
+          comment[:pull_request_author] = event["pull_request"]["user"]["login"]
+          comment[:path] = event["comment"]["path"]
+          comment[:position] = event["comment"]["position"]
+        end
         do_relay(comment)
       end
     end
@@ -99,7 +106,8 @@ module Anonydog
     end
     
     def is_create_comment(event)
-      "created" == event["action"] && !event["comment"].nil? && !event["issue"].nil?
+      "created" == event["action"] && !event["comment"].nil? &&
+      (!event["issue"].nil? || !event["pull_request"].nil?)
     end
 
     def github_api
@@ -179,12 +187,29 @@ module Anonydog
       #gate check: is this a comment from the original author of the PR?
       return "not a comment from author. won't relay." if comment[:author] != comment[:pull_request_author]
 
-      pull_request = pr_repo.bot_pull_request(comment[:pull_request_url])
+      botpr = pr_repo.bot_pull_request(comment[:pull_request_url])
 
-      upstream_repo = pull_request["upstream_repo"]
-      upstream_issue = pull_request["upstream_issue"]
+      botpr_url = botpr[:url]
+      botpr_repo = botpr[:repo]
+      botpr_issue = botpr[:issue]
 
-      github_api.add_comment(upstream_repo, upstream_issue, comment[:body])
+      if comment[:path].nil? then
+        github_api.add_comment(botpr_repo, botpr_issue, comment[:body])
+      else
+        bot_pull_request = github_api.get(botpr_url)
+
+        commit_id = bot_pull_request[:head][:sha]
+
+        # TODO: can we assume that the PRs are synced? (C110F795)
+        github_api.create_pull_request_comment(
+          botpr_repo,
+          botpr_issue,
+          comment[:body],
+          commit_id,
+          comment[:path],
+          comment[:position]
+        )
+      end
 
       "ok"
     end

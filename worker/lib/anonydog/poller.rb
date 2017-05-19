@@ -108,7 +108,7 @@ module Anonydog
           # TODO: using latest SHA from contributor PR assumes it corresponds
           #       to the comments commit_id. can we assume that? if not, is it
           #       worth mapping the anonymized comment ids to the original
-          #       ones?
+          #       ones? (C110F795)
           commit_id = contributor_pull_request[:head][:sha]
           path = comment[:path]
           position = comment[:position]
