@@ -8,13 +8,15 @@ module Anonydog
         botpr = data[:botpr]
 
         redis.hmset(
-          "botpr:#{data[:botpr_url]}",
-            "bot_repo", contributor_pr[:repo],
-            "bot_repo_issue", contributor_pr[:issue]
+          "botpr:#{botpr[:url]}",
+            "url", contributor_pr[:url],
+            "repo", contributor_pr[:repo],
+            "issue", contributor_pr[:issue]
         )
 
+        #TODO: uniform
         redis.hmset(
-          "contributorpr:#{data[:contributorpr_url]}",
+          "contributorpr:#{contributor_pr[:url]}",
             "upstream_repo", botpr[:repo],
             "upstream_issue", botpr[:issue]
         )
@@ -22,7 +24,8 @@ module Anonydog
 
       # fetch the contributor's pull request data corresponding to a bot PR url
       def contributor_pull_request(botpr_url)
-        redis.hgetall("botpr:#{botpr_url}")
+        h = redis.hgetall("botpr:#{botpr_url}")
+        h.inject({}) { |acc, entry| acc[entry[0].to_sym] = entry[1]; acc }
       end
 
       # fetch the bot's pull request data corresponding to a contributor PR url

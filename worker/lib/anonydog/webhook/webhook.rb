@@ -31,7 +31,8 @@ module Anonydog
         # the schema coincides with the schema from octokit anyway. by adding
         # our own translation layer, we're only introducing complexity
         pull_request = {}
-        pull_request[:url] = event["pull_request"]["html_url"]
+        pull_request[:url] = event["pull_request"]["url"]
+        pull_request[:html_url] = event["pull_request"]["html_url"]
         pull_request[:title] = event["pull_request"]["title"]
         pull_request[:body] = event["pull_request"]["body"]
         pull_request[:number] = event["pull_request"]["number"]
@@ -52,7 +53,8 @@ module Anonydog
         do_anonymize(pull_request)
       elsif is_synchronize_pull_request(event) then
         pull_request = {}
-        pull_request[:url] = event["pull_request"]["html_url"]
+        pull_request[:url] = event["pull_request"]["url"]
+        pull_request[:html_url] = event["pull_request"]["html_url"]
         pull_request[:comments_url] = event["pull_request"]["comments_url"]
 
         pull_request[:base] = {}
@@ -105,7 +107,7 @@ module Anonydog
     end
 
     def do_anonymize(pull_request)
-      received_pr_url = pull_request[:url]
+      received_pr_url = pull_request[:html_url]
       branch_suffix = Digest::SHA256.hexdigest(received_pr_url).slice(0..8)
       anonref = "pullrequest-#{branch_suffix}"
 
@@ -128,13 +130,13 @@ module Anonydog
       )
 
       pr_repo.store_mapping(
-        :botpr_url => pr_created.url,
-        :contributorpr_url => pull_request[:url],
         :contributorpr => {
+          :url => pull_request[:url],
           :repo => bot_repo.full_name,
           :issue => pull_request[:number]
         },
         :botpr => {
+          :url => pr_created.url,
           :repo => pr_created["base"]["repo"]["full_name"],
           :issue => pr_created["number"]
         }
@@ -156,7 +158,7 @@ module Anonydog
     end
     
     def do_synchronize(pull_request)
-      received_pr_url = pull_request[:url]
+      received_pr_url = pull_request[:html_url]
       branch_suffix = Digest::SHA256.hexdigest(received_pr_url).slice(0..8)
       anonref = "pullrequest-#{branch_suffix}"
 
