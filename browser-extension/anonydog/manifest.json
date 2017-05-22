@@ -1,0 +1,20 @@
+{
+
+  "manifest_version": 2,
+  "name": "Anonydog",
+  "version": "1.0",
+
+  "description": "Enables anonymous pull requests on Github",
+
+  "icons": {
+    "48": "icons/anonydog-48.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://github.com/*/compare/*...*"],
+      "js": ["anonydog.js"]
+    }
+  ]
+
+}
