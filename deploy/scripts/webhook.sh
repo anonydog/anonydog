@@ -13,7 +13,6 @@ SCRIPTS_DIR=$(cd "$(dirname "$0")"; pwd)
 
 ENVS_DIR=$(cd "$SCRIPTS_DIR/../envs"; pwd)
 BIN_DIR=$(cd "$SCRIPTS_DIR/../../worker"; pwd)
-MAIN=$BIN_DIR/$MAIN_SCRIPT
 
 SELECTED_ENV_DIR="$ENVS_DIR/$ANONYDOG_ENV"
 
@@ -36,6 +35,4 @@ env GITHUB_API_ACCESS_TOKEN=$GITHUB_API_ACCESS_TOKEN \
     GITHUB_SSH_KEY_PASSPHRASE=$GITHUB_SSH_KEY_PASSPHRASE \
     REDIS_DATABASE_URL=$REDIS_DATABASE_URL \
     RACK_ENV=production \
-    IP=127.0.0.1 \
-    PORT=5000 \
-    $MAIN
+    thin start -c $BIN_DIR -C $BIN_DIR/webhook.thin.yml

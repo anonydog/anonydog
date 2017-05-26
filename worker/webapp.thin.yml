@@ -1,0 +1,14 @@
+---
+environment: production
+timeout: 30
+log: "/var/log/thin/webapp.log"
+pid: "/tmp/pids/webapp.pid"
+max_conns: 1024
+max_persistent_conns: 100
+require: []
+wait: 30
+threadpool_size: 20
+servers: 3
+socket: "/tmp/anonydog.webapp.sock"
+rackup: webapp.config.ru
+daemonize: true

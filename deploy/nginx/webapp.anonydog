@@ -1,10 +1,15 @@
 #FIXME: move to deploy/envs/arraisbot and adjust deploy procedure
+upstream  anonydog-webapp {
+   server   unix:/tmp/anonydog.webapp.0.sock;
+   server   unix:/tmp/anonydog.webapp.1.sock;
+   server   unix:/tmp/anonydog.webapp.2.sock;
+}
+
 server {
     listen 80; # TODO: https (when in prod)
     server_name webapp.dev.anonydog.org;
     location / {
-        #TODO: need to keep port number in sync with deploy/scripts/webapp.sh
-        proxy_pass http://127.0.0.1:4000;
+        proxy_pass http://anonydog-webapp;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

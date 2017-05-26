@@ -13,7 +13,6 @@ SCRIPTS_DIR=$(cd "$(dirname "$0")"; pwd)
 
 ENVS_DIR=$(cd "$SCRIPTS_DIR/../envs"; pwd)
 BIN_DIR=$(cd "$SCRIPTS_DIR/../../worker"; pwd)
-MAIN=$BIN_DIR/$MAIN_SCRIPT
 
 SELECTED_ENV_DIR="$ENVS_DIR/$ANONYDOG_ENV"
 
@@ -24,6 +23,4 @@ MESSAGE_QUEUE_URL=`cat $SELECTED_ENV_DIR/message_queue_url`
 
 env MESSAGE_QUEUE_URL=$MESSAGE_QUEUE_URL \
     RACK_ENV=production \
-    IP=127.0.0.1 \
-    PORT=4000 \
-    $MAIN
+    thin start -c $BIN_DIR -C $BIN_DIR/webapp.thin.yml
