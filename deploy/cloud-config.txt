@@ -30,6 +30,7 @@ packages:
 # Note, that the list has to be proper yaml, so you have to quote
 # any characters yaml would eat (':' can be problematic)
 runcmd:
+ - [mkdir, "/var/log/thin"]
  - [ git, "clone", "https://github.com/anonydog/anonydog.git", "/tmp/anonydog" ]
  # TODO: I'm sure I'm abusing cloud-init here, but...
  - [ cp, "/tmp/anonydog/deploy/envs/production/nginx/webapp.anonydog", "/etc/nginx/sites-available/webapp.anonydog" ]
