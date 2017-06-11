@@ -11,7 +11,7 @@ var github_pr_button = document.querySelector("form#new_pull_request div.form-ac
 github_pr_button.classList.remove("btn-primary");
 
 var our_button_html = `
-  <button class="btn btn-primary">
+  <button id="anonydog-pr" class="btn btn-primary" type="button">
     Create anonymous pull request
     <img
       src="https://avatars3.githubusercontent.com/u/24738062?v=3&s=16"
@@ -22,4 +22,16 @@ var our_button_html = `
 `;
 github_pr_button.insertAdjacentHTML("beforebegin", our_button_html);
 
-document.body.style.border = "5px solid red";
+var send_pr = function() {
+  // TODO: we're assuming this meta tag contains repo_user/repo_name. Test for that
+  var repo_full_name = document.head.querySelector('meta[name="octolytics-dimension-repository_nwo"]').content,
+      parts = repo_full_name.split('/'),
+      repo_user = parts[0],
+      repo_name = parts[1];
+
+  console.log(`Detected PR to ${repo_full_name}`);
+  console.log(`Will ask for a fork of user ${repo_user}'s repo ${repo_name}`);
+  console.log(`Will deflect PR to anonydog/${repo_name}`);
+};
+
+document.querySelector("#anonydog-pr").addEventListener("click", send_pr);
