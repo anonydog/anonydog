@@ -22,7 +22,7 @@ var our_button_html = `
 `;
 github_pr_button.insertAdjacentHTML("beforebegin", our_button_html);
 
-var send_pr = function() {
+var deflect_pr = function() {
   // TODO: we're assuming this meta tag contains repo_user/repo_name. Test for that
   var repo_full_name = document.head.querySelector('meta[name="octolytics-dimension-repository_nwo"]').content,
       parts = repo_full_name.split('/'),
@@ -32,6 +32,41 @@ var send_pr = function() {
   console.log(`Detected PR to ${repo_full_name}`);
   console.log(`Will ask for a fork of user ${repo_user}'s repo ${repo_name}`);
   console.log(`Will deflect PR to anonydog/${repo_name}`);
+  
+  //FIXME: "arraisbot" is hardcoded. need someway to switch between dev/staging/prod
+  open_pr("arraisbot", repo_name);
 };
 
-document.querySelector("#anonydog-pr").addEventListener("click", send_pr);
+var open_pr = function(dest_user, dest_repo_name) {
+  var compare_page_request = new XMLHttpRequest();
+  compare_page_request.onload = function() {
+    // reference to document assumes we're on the original pull request page
+    var orig_form = document.body.querySelector("#new_pull_request");
+    var dest_form = this.responseXML.querySelector("#new_pull_request");
+  
+    dest_form.elements.namedItem("pull_request[title]").value = orig_form.elements.namedItem("pull_request[title]").value;
+    dest_form.elements.namedItem("pull_request[body]").value = orig_form.elements.namedItem("pull_request[body]").value;
+  
+    var form_data = new FormData(dest_form);
+  
+    var create_pr_request = new XMLHttpRequest();
+    
+    create_pr_request.onload = function() {
+      //FIXME: need to verify that request was successful and send the browser
+      //to the newly created PR
+      console.log("PR deflected!");
+    };
+    
+    create_pr_request.open("POST", dest_form.action);
+    create_pr_request.send(form_data);
+  }
+  var orig_branch = "thiagoarrais:patch-1", //FIXME: need to read this from somewhere
+      compare_page_url = `https://github.com/${dest_user}/${dest_repo_name}/compare/master...${orig_branch}`;
+
+  compare_page_request.open("GET", compare_page_url);
+  compare_page_request.responseType = "document";
+  
+  compare_page_request.send();
+}
+
+document.querySelector("#anonydog-pr").addEventListener("click", deflect_pr);
