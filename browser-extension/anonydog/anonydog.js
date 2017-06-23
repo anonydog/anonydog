@@ -52,9 +52,7 @@ var open_pr = function(dest_user, dest_repo_name) {
     var create_pr_request = new XMLHttpRequest();
     
     create_pr_request.onload = function() {
-      //FIXME: need to verify that request was successful and send the browser
-      //to the newly created PR
-      console.log("PR deflected!");
+      window.location.replace(create_pr_request.responseURL);
     };
     
     create_pr_request.open("POST", dest_form.action);
