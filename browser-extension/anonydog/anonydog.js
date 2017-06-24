@@ -37,6 +37,29 @@ var deflect_pr = function() {
   open_pr("arraisbot", repo_name);
 };
 
+var headBranchNameFrom = function(url) {
+  //TODO: maybe use https://www.npmjs.com/package/query-string
+  var query = url.split("?")[1];
+  var entries = query.split("&").
+    map(function(pair_str) {
+      return pair_str.split("=").map(decodeURIComponent);
+    }).
+    map(function(entry_arr) {
+      return {
+        key: entry_arr[0],
+        value: entry_arr[1]
+      };
+    });
+  
+  var head_entry_arr = entries.filter(function(entry) {
+    return entry.key == "head";
+  });
+  
+  var head_entry = head_entry_arr[0];
+  
+  return head_entry.value;
+};
+
 var open_pr = function(dest_user, dest_repo_name) {
   var compare_page_request = new XMLHttpRequest();
   compare_page_request.onload = function() {
@@ -58,13 +81,13 @@ var open_pr = function(dest_user, dest_repo_name) {
     create_pr_request.open("POST", dest_form.action);
     create_pr_request.send(form_data);
   }
-  var orig_branch = "thiagoarrais:patch-1", //FIXME: need to read this from somewhere
+  var orig_branch = headBranchNameFrom(document.body.querySelector("#new_pull_request").action),
       compare_page_url = `https://github.com/${dest_user}/${dest_repo_name}/compare/master...${orig_branch}`;
 
   compare_page_request.open("GET", compare_page_url);
   compare_page_request.responseType = "document";
   
   compare_page_request.send();
-}
+};
 
 document.querySelector("#anonydog-pr").addEventListener("click", deflect_pr);
