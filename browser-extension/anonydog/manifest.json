@@ -12,8 +12,7 @@
 
   "content_scripts": [
     {
-      //FIXME: won't match in the wild because github replaces the URL programatically
-      "matches": ["*://github.com/*/compare/*...*"],
+      "matches": ["*://github.com/*/compare", "*://github.com/*/compare/*"],
       "js": ["anonydog.js"]
     }
   ]
