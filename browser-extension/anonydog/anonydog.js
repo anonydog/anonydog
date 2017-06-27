@@ -58,14 +58,13 @@ waitFor(
           repo_user = parts[0],
           repo_name = parts[1];
 
-      console.log(`Detected PR to ${repo_full_name}`);
-      console.log(`Will ask for a fork of user ${repo_user}'s repo ${repo_name}`);
       console.log(`Will deflect PR to anonydog/${repo_name}`);
 
-      //FIXME: need to ask for new anonymizing fork before opening the PR
-      //request_fork(repo_user, repo_name);
-      //FIXME: "arraisbot" is hardcoded. need someway to switch between dev/staging/prod
-      open_pr("arraisbot", repo_name);
+      request_fork(repo_user, repo_name, function() {
+        //FIXME: repo creation is async. open_pr may have no URL to post to
+        //FIXME: "arraisbot" is hardcoded. need someway to switch between dev/staging/prod
+        open_pr("arraisbot", repo_name);
+      });
     };
 
     var headBranchNameFrom = function(url) {
@@ -89,6 +88,24 @@ waitFor(
       var head_entry = head_entry_arr[0];
 
       return head_entry.value;
+    };
+
+    var request_fork = function(user, repo, callback) {
+      var request_fork_request = new XMLHttpRequest();
+
+      request_fork_request.onload = function() {
+        callback();
+      };
+
+      request_fork_request.open("POST", "http://webapp.dev.anonydog.org/fork"); //FIXME: hardcoded
+      
+      var post_data = new FormData();
+      post_data.append("user", user);
+      post_data.append("repo", repo);
+      
+      //request_fork_request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+      request_fork_request.send(post_data);
     };
 
     var open_pr = function(dest_user, dest_repo_name) {
