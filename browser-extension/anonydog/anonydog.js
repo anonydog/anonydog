@@ -61,7 +61,6 @@ waitFor(
       console.log(`Will deflect PR to anonydog/${repo_name}`);
 
       request_fork(repo_user, repo_name, function() {
-        //FIXME: repo creation is async. open_pr may have no URL to post to
         //FIXME: "arraisbot" is hardcoded. need someway to switch between dev/staging/prod
         open_pr("arraisbot", repo_name);
       });
@@ -98,37 +97,49 @@ waitFor(
       };
 
       request_fork_request.open("POST", "http://webapp.dev.anonydog.org/fork"); //FIXME: hardcoded
-      
+
       var post_data = new FormData();
       post_data.append("user", user);
       post_data.append("repo", repo);
-      
-      //request_fork_request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
       request_fork_request.send(post_data);
     };
 
     var open_pr = function(dest_user, dest_repo_name) {
-      var compare_page_request = new XMLHttpRequest();
-      compare_page_request.onload = function() {
-        // reference to document assumes we're on the original pull request page
-        var orig_form = document.body.querySelector("#new_pull_request");
-        var dest_form = this.responseXML.querySelector("#new_pull_request");
+      var compare_page_request = new XMLHttpRequest(),
+          compare_page_notfound = function() {
+            //the bot probably didn't create the anonymizing repo yet. wait a second and retry
+            //TODO: this isn't very clean. what should we do here? can we avoid getting to this state?
+            setTimeout(function() { open_pr(dest_user, dest_repo_name); }, 1000);
+          },
+          compare_page_ok = function() {
+            // reference to document assumes we're on the original pull request page
+            var orig_form = document.body.querySelector("#new_pull_request");
+            var dest_form = compare_page_request.responseXML.querySelector("#new_pull_request");
 
-        dest_form.elements.namedItem("pull_request[title]").value = orig_form.elements.namedItem("pull_request[title]").value;
-        dest_form.elements.namedItem("pull_request[body]").value = orig_form.elements.namedItem("pull_request[body]").value;
+            dest_form.elements.namedItem("pull_request[title]").value = orig_form.elements.namedItem("pull_request[title]").value;
+            dest_form.elements.namedItem("pull_request[body]").value = orig_form.elements.namedItem("pull_request[body]").value;
 
-        var form_data = new FormData(dest_form);
+            var form_data = new FormData(dest_form);
 
-        var create_pr_request = new XMLHttpRequest();
+            var create_pr_request = new XMLHttpRequest();
 
-        create_pr_request.onload = function() {
-          window.location.replace(create_pr_request.responseURL);
-        };
+            create_pr_request.onload = function() {
+              window.location.replace(create_pr_request.responseURL);
+            };
 
-        create_pr_request.open("POST", dest_form.action);
-        create_pr_request.send(form_data);
-      }
+            create_pr_request.open("POST", dest_form.action);
+            create_pr_request.send(form_data);
+          };
+
+      compare_page_request.onreadystatechange = function() {
+        if (compare_page_request.readyState === XMLHttpRequest.DONE && compare_page_request.status === 200) {
+          compare_page_ok();
+        } else if (compare_page_request.readyState === XMLHttpRequest.DONE && compare_page_request.status === 404) {
+          compare_page_notfound();
+        }
+      };
+
       var orig_branch = headBranchNameFrom(document.body.querySelector("#new_pull_request").action),
           compare_page_url = `https://github.com/${dest_user}/${dest_repo_name}/compare/master...${orig_branch}`;
 
