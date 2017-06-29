@@ -2,7 +2,7 @@
 # encoding: US-ASCII
 
 require 'minitest/autorun'
-require 'anonydog/local' # FIXME A05E92A2: i'd like to just 'require anonydog'
+require 'anonydog/local' # TODO A05E92A2: i'd like to just 'require anonydog'
 
 class AnonymizeTest < MiniTest::Test
   # repo layout for reference
