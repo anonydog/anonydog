@@ -10,8 +10,7 @@
     "48": "icons/anonydog-48.png"
   },
 
-  //FIXME: hardcoded url for staging env. should we use some match pattern?
-  "permissions": [ "http://webapp.dev.anonydog.org/" ],
+  "permissions": [ "*://*.anonydog.org/" ],
 
   "content_scripts": [
     {
