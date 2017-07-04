@@ -10,13 +10,19 @@
     "48": "icons/anonydog-48.png"
   },
 
-  "permissions": [ "*://*.anonydog.org/" ],
+  "permissions": [
+    "*://*.anonydog.org/",
+    "storage"
+  ],
 
   "content_scripts": [
     {
       "matches": ["*://github.com/*/compare", "*://github.com/*/compare/*"],
       "js": ["anonydog.js"]
     }
-  ]
+  ],
 
+  "options_ui": {
+    "page": "options.html"
+  }
 }
