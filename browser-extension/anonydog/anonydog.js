@@ -159,8 +159,8 @@ waitFor(
         }
       }
     ).
-    then(function(env) {
-      augmentPullRequestPage(github_pr_button, env);
+    then(function(stored_values) {
+      augmentPullRequestPage(github_pr_button, stored_values.env);
     },
     function () {
       console.log("anonydog could not retrieve env. panicking.")
