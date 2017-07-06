@@ -1,9 +1,5 @@
-//need to:
-// * actually send the PR to anonydog
-
 //known issues:
 // * does not render well in chrome
-// * sometimes the querySelector returns null
 // * adds a permanent marker in chrome (shows in every tab. even outside github)
 
 var waitFor = function(selector, operation) {
@@ -23,7 +19,7 @@ var waitFor = function(selector, operation) {
       });
     });
   });
-  
+
   //TODO: this is straight from SO. I guess it can use some optmizing...
   observer.observe(document.body, {
       childList: true
@@ -37,17 +33,22 @@ var waitFor = function(selector, operation) {
 var augmentPullRequestPage = function(github_pr_button, env) {
   github_pr_button.classList.remove("btn-primary");
 
-  var our_button_html = `
-    <button id="anonydog-pr" class="btn btn-primary" type="button">
-      Create anonymous pull request
-      <img
-        src="https://avatars3.githubusercontent.com/u/24738062?v=3&s=16"
-        style="margin-left: 3px"
-        width="16"
-        height="16" />
-    </button>
-  `;
-  github_pr_button.insertAdjacentHTML("beforebegin", our_button_html);
+  var our_button_element = document.createElement("button");
+  our_button_element.setAttribute("id", "anonydog-pr");
+  our_button_element.setAttribute("class", "btn btn-primary");
+  our_button_element.setAttribute("type", "button");
+
+  our_button_element.appendChild(document.createTextNode("Create anonymous pull request"));
+
+  var bot_avatar_img_element = document.createElement("img");
+  bot_avatar_img_element.setAttribute("src", "https://avatars3.githubusercontent.com/u/24738062?v=3&s=16");
+  bot_avatar_img_element.setAttribute("style", "margin-left: 3px");
+  bot_avatar_img_element.setAttribute("width", "16");
+  bot_avatar_img_element.setAttribute("height", "16");
+
+  our_button_element.appendChild(bot_avatar_img_element);
+
+  github_pr_button.insertAdjacentElement("beforebegin", our_button_element);
 
   var deflect_pr = function() {
     // TODO: we're assuming this meta tag contains repo_user/repo_name. Test for that
