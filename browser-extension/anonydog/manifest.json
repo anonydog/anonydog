@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "Anonydog",
-  "version": "1.0",
+  "version": "0.1",
 
   "description": "Enables anonymous pull requests on Github",
 
