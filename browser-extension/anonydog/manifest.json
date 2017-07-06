@@ -6,6 +6,12 @@
 
   "description": "Enables anonymous pull requests on Github",
 
+  "applications": {
+    "gecko": {
+      "id": "addon@anonydog.org"
+    }
+  },
+
   "icons": {
     "48": "icons/anonydog-48.png"
   },
