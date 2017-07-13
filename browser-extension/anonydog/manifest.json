@@ -28,6 +28,10 @@
     }
   ],
 
+  "web_accessible_resources": [
+    "icons/anonydog-16.jpg"
+  ],
+
   "options_ui": {
     "page": "options.html"
   }

@@ -41,7 +41,7 @@ var augmentPullRequestPage = function(github_pr_button, env) {
   our_button_element.appendChild(document.createTextNode("Create anonymous pull request"));
 
   var bot_avatar_img_element = document.createElement("img");
-  bot_avatar_img_element.setAttribute("src", "https://avatars3.githubusercontent.com/u/24738062?v=3&s=16");
+  bot_avatar_img_element.setAttribute("src", browser.extension.getURL("icons/anonydog-16.jpg"));
   bot_avatar_img_element.setAttribute("style", "margin-left: 3px");
   bot_avatar_img_element.setAttribute("width", "16");
   bot_avatar_img_element.setAttribute("height", "16");
