@@ -13,7 +13,8 @@
   },
 
   "icons": {
-    "48": "icons/anonydog-48.png"
+    "48": "icons/anonydog-48.jpg",
+    "96": "icons/anonydog-96.jpg"
   },
 
   "permissions": [
