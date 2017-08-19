@@ -107,6 +107,7 @@ module Anonydog
 
     # Publishes anonymized branch to given URL. Returns randomly generated name
     # for the anonymized ref (can be used to open the PR)
+    # TODO: this looks very similar to publish_anonymized. can we DRY it out?
     def self.publish_anonymized_sync(
       base_clone_url, base_ref,
       head_clone_url, head_commit,
