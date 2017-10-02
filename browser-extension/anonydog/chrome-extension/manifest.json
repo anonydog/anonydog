@@ -1,0 +1,31 @@
+{
+    "manifest_version": 2,
+    "name": "Anonydog",
+    "description": "Enables anonymous pull requests on Github",
+    "version": "0.1.1",
+    "content_scripts": [{
+        "matches": [
+            "*://github.com/*/compare",
+            "*://github.com/*/compare/*"
+        ],
+        "js": [
+            "anonydog.js"
+        ],
+        "run_at": "document_start"
+    }],
+    "permissions": [
+        "*://*.anonydog.org/",
+        "storage"
+    ],
+    "browser_action": {
+        "default_icon": "icons/anonydog-32.png"
+    },
+    "icons": {
+        "128": "icons/anonydog-128.png",
+        "16": "icons/anonydog-16.png",
+        "64": "icons/anonydog-64.png"
+    },
+    "options_ui": {
+        "page": "options.html"
+    }
+}

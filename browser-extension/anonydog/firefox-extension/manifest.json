@@ -1,0 +1,37 @@
+{
+
+    "manifest_version": 2,
+    "name": "Anonydog",
+    "version": "0.1.1",
+
+    "description": "Enables anonymous pull requests on Github",
+
+    "applications": {
+        "gecko": {
+            "id": "addon@anonydog.org"
+        }
+    },
+
+    "icons": {
+        "48": "icons/anonydog-48.jpg",
+        "96": "icons/anonydog-96.jpg"
+    },
+
+    "permissions": [
+        "*://*.anonydog.org/",
+        "storage"
+    ],
+
+    "content_scripts": [{
+        "matches": ["*://github.com/*/compare", "*://github.com/*/compare/*"],
+        "js": ["anonydog.js"]
+    }],
+
+    "web_accessible_resources": [
+        "icons/anonydog-16.jpg"
+    ],
+
+    "options_ui": {
+        "page": "options.html"
+    }
+}

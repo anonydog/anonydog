@@ -1,0 +1,5 @@
+Anonydog Browser Extension Privacy Policy
+
+The Anonydog Browser Extension WON'T in any way collect, use or store personal
+information about you. It WILL, however, call the anonydog.org services for
+fullfilling your requests. All such calls will be anonymous.
