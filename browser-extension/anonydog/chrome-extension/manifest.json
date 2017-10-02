@@ -15,14 +15,19 @@
     }],
     "permissions": [
         "*://*.anonydog.org/",
-        "storage"
+        "storage",
+        "tabs"
     ],
     "browser_action": {
-        "default_icon": "icons/anonydog-32.png"
+        "default_icon": "icons/anonydog-32.png",
+        "default_popup": "popup.html"
     },
     "icons": {
         "128": "icons/anonydog-128.png",
         "16": "icons/anonydog-16.png",
         "64": "icons/anonydog-64.png"
+    },
+    "options_ui": {
+        "page": "options.html"
     }
 }
