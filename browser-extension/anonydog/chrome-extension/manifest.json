@@ -18,7 +18,7 @@
         "storage"
     ],
     "browser_action": {
-        "default_icon": "icons/anonydog-32.png",
+        "default_icon": "icons/anonydog-32.png"
     },
     "icons": {
         "128": "icons/anonydog-128.png",
