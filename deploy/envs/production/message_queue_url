@@ -1,1 +1,1 @@
-amqp://localhost
+amqp://rabbitmq/%2F
