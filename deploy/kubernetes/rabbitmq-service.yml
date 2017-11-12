@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: rabbitmq
+spec:
+  ports:
+    # Accept traffic sent to port 80
+    - name: amqp
+      port: 5672
+      targetPort: 5672
+  selector:
+    app: rabbitmq

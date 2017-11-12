@@ -1,0 +1,37 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: webhook
+spec:
+  template:
+    metadata:
+      labels:
+        app: webhook
+    spec:
+      volumes:
+      - name: anonydog-ssh
+        secret:
+          secretName: anonydog-secrets
+      containers:
+      - name: webhook
+        image: thiagoarrais/anonydog-webhook
+        volumeMounts:
+        - name: anonydog-ssh
+          readOnly: true
+          mountPath: "/data/ssh"
+        env:
+          - name: GITHUB_API_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: anonydog-secrets
+                key: github_api_access_token
+          - name: GITHUB_WEBHOOK_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: anonydog-secrets
+                key: github_webhook_secret
+          - name: REDIS_DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: anonydog-secrets
+                key: redis_database_url

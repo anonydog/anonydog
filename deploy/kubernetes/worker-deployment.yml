@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+      - name: worker
+        image: thiagoarrais/anonydog-worker
+        env:
+          - name: MESSAGE_QUEUE_URL
+            valueFrom:
+              secretKeyRef:
+                name: anonydog-secrets
+                key: message_queue_url
+          - name: GITHUB_WEBHOOK_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                name: anonydog-secrets
+                key: github_webhook_endpoint
+          - name: GITHUB_API_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: anonydog-secrets
+                key: github_api_access_token
+          - name: GITHUB_WEBHOOK_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: anonydog-secrets
+                key: github_webhook_secret

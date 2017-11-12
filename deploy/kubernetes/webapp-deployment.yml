@@ -1,0 +1,20 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: webapp
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: thiagoarrais/anonydog-webapp
+        env:
+        - name: MESSAGE_QUEUE_URL
+          valueFrom:
+            secretKeyRef:
+              name: anonydog-secrets
+              key: message_queue_url
