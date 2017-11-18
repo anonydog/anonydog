@@ -3,16 +3,29 @@
 <html>
   <head>
     <meta charset="utf-8">
+
+    <style>
+        form {
+            padding: 15px;
+        }
+
+        input {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+        }
+    </style>
   </head>
 
   <body>
 
     <form>
-        <label>Bot User<input type="text" id="bot_user" ></label>
+        <label>Bot User<input type="text" id="bot_user"></label>
         <label>Webapp Root<input type="text" id="webapp_url" ></label>
         <button type="submit">Save</button>
     </form>
 
+    <script src="browser-polyfill.min.js"></script>
     <script src="options.js"></script>
 
   </body>

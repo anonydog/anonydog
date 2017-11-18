@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 
 <html>
-
-<head>
+  <head>
     <meta charset="utf-8">
 
     <style>
         form {
             padding: 15px;
         }
-        
+
         input {
             display: block;
             margin: 10px 0;
             width: 100%;
         }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
 
     <form>
-        <label>Bot User</label>
-        <input type="text" id="bot_user" value="anonydog" onfocus="if(this.value=='anonydog')this.value=''" onblur="if(this.value=='')this.value='anonydog'">
-
-        <label>Webapp Root</label>
-        <input type="text" id="webapp_url" value="http://anonydog.org" onfocus="if(this.value=='http://anonydog.org')this.value=''" onblur="if(this.value=='')this.value='http://anonydog.org'">
+        <label>Bot User<input type="text" id="bot_user"></label>
+        <label>Webapp Root<input type="text" id="webapp_url" ></label>
         <button type="submit">Save</button>
     </form>
 
+    <script src="browser-polyfill.min.js"></script>
     <script src="options.js"></script>
 
-</body>
+  </body>
 
 </html>

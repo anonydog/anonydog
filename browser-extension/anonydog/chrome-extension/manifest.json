@@ -26,6 +26,8 @@
         "64": "icons/anonydog-64.png"
     },
     "options_ui": {
-        "page": "options.html"
+        "page": "options.html",
+        "browser_style": true,
+        "chrome_style": true
     }
 }
