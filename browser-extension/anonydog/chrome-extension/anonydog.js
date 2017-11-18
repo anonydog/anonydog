@@ -41,6 +41,7 @@ var augmentPullRequestPage = function(github_pr_button, env) {
   our_button_element.appendChild(document.createTextNode("Create anonymous pull request"));
 
   var bot_avatar_img_element = document.createElement("img");
+  // FIXME: this for some reason doesn't work. the bot avatar wont get displayed
   bot_avatar_img_element.setAttribute("src", chrome.runtime.getURL("icons/anonydog-16.png"));
   bot_avatar_img_element.setAttribute("style", "margin-left: 3px");
   bot_avatar_img_element.setAttribute("width", "16");
