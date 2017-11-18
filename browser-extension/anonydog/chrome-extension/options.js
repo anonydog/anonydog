@@ -12,7 +12,7 @@ function restoreOptions() {
 
   function setCurrentChoice(result) {
     document.querySelector("#bot_user").value = result.bot_user || "anonydog";
-    document.querySelector("#webapp_url").value = result.webapp_url || "http://anonydog.org";
+    document.querySelector("#webapp_url").value = result.webapp_url || "https://anonydog.org";
   }
 
   function onError(error) {
