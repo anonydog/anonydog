@@ -7,7 +7,8 @@ spec:
     # Accept traffic sent to port 80
     - name: http
       port: 80
-      targetPort: 80
+      protocol: TCP
   selector:
     app: webhook
-  type: LoadBalancer
+  externalIPs:
+    - 10.142.0.3
