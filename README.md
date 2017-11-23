@@ -1,5 +1,7 @@
 # anonydog
 
+[![Backers on Open Collective](https://opencollective.com/anonydog/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/anonydog/sponsors/badge.svg)](#sponsors)
+
 Woof! On the internet, nobody knows you're a dog.
 
 Is your identity influencing the way project mantainers look at your pull
@@ -43,3 +45,33 @@ we'll talk.
 
 [1]: https://github.com/anonydog/anonydog/issues
 [2]: https://twitter.com/swfiua/status/811690973919137792
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute]](CONTRIBUTING.md).
+<a href="graphs/contributors"><img src="https://opencollective.com/anonydog/contributors.svg?width=890" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/anonydog#backer)]
+
+<a href="https://opencollective.com/anonydog#backers" target="_blank"><img src="https://opencollective.com/anonydog/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/anonydog#sponsor)]
+
+<a href="https://opencollective.com/anonydog/sponsor/0/website" target="_blank"><img src="https://opencollective.com/anonydog/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/anonydog/sponsor/1/website" target="_blank"><img src="https://opencollective.com/anonydog/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/anonydog/sponsor/2/website" target="_blank"><img src="https://opencollective.com/anonydog/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/anonydog/sponsor/3/website" target="_blank"><img src="https://opencollective.com/anonydog/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/anonydog/sponsor/4/website" target="_blank"><img src="https://opencollective.com/anonydog/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/anonydog/sponsor/5/website" target="_blank"><img src="https://opencollective.com/anonydog/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/anonydog/sponsor/6/website" target="_blank"><img src="https://opencollective.com/anonydog/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/anonydog/sponsor/7/website" target="_blank"><img src="https://opencollective.com/anonydog/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/anonydog/sponsor/8/website" target="_blank"><img src="https://opencollective.com/anonydog/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/anonydog/sponsor/9/website" target="_blank"><img src="https://opencollective.com/anonydog/sponsor/9/avatar.svg"></a>
+
+
