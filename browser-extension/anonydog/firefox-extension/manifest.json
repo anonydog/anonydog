@@ -23,8 +23,13 @@
     ],
 
     "content_scripts": [{
-        "matches": ["*://github.com/*/compare", "*://github.com/*/compare/*"],
-        "js": ["anonydog.js"]
+        "matches": [
+            "*://github.com/*/compare",
+            "*://github.com/*/compare/*"
+        ],
+        "js": [
+            "anonydog.js"
+        ]
     }],
 
     "web_accessible_resources": [
