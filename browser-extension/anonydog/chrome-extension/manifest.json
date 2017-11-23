@@ -7,9 +7,10 @@
     "description": "Enables anonymous pull requests on Github",
 
     "icons": {
-        "128": "icons/anonydog-128.png",
         "16": "icons/anonydog-16.png",
-        "64": "icons/anonydog-64.png"
+        "48": "icons/anonydog-48.png",
+        "96": "icons/anonydog-96.png",
+        "128": "icons/anonydog-128.png"
     },
 
     "permissions": [
@@ -27,6 +28,10 @@
             "anonydog.js"
         ]
     }],
+
+    "web_accessible_resources": [
+        "icons/anonydog-16.png"
+    ],
 
     "browser_action": {
         "default_icon": "icons/anonydog-32.png"
