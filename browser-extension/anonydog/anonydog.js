@@ -1,7 +1,3 @@
-//known issues:
-// * does not render well in chrome
-// * adds a permanent marker in chrome (shows in every tab. even outside github)
-
 var waitFor = function(selector, operation) {
   if (null != document.body.querySelector(selector)) {
     operation(document.body.querySelector(selector));
