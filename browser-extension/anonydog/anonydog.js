@@ -1,6 +1,60 @@
+var pr_button_html = `<div class="js-merge-pr js-pull-merging merge-pr is-merging" data-url="/bogus" style="block-size: 0px; border-top: 0px none; height: 0px; margin-top: 0px; padding-top: 0px;">
+  <div class="select-menu d-inline-block js-menu-container js-select-menu js-transitionable" style="float: right; box-sizing: content-box; display: block; visibility: visible;" id="anonydog-select-menu">
+    <div style="display: none">
+      <input type="text" class="js-merge-title" />
+      <textarea class="js-merge-message" >
+      </textarea>
+    </div>
+
+    <div class="BtnGroup btn-group-merge">
+      <button type="button" class="btn btn-primary BtnGroup-item js-details-target" aria-expanded="false" data-details-container=".js-merge-pr" style="float: none" id="anonydog-pr-button">
+        Create anonymous pull request
+      </button><button class="btn btn-primary select-menu-button BtnGroup-item js-menu-target" style="float: none" type="button" aria-label="Select merge method" aria-haspopup="true" aria-expanded="false"></button>
+    </div>
+    <div class="BtnGroup btn-group-squash">
+      <button type="submit" class="btn btn-primary BtnGroup-item js-details-target" aria-expanded="false" data-details-container=".js-merge-pr" style="float: none" id="github-pr-button">
+        Create pull request
+      </button><button class="btn btn-primary select-menu-button BtnGroup-item js-menu-target" style="float: none" type="button" aria-label="Select merge method" aria-haspopup="true" aria-expanded="false"></button>
+    </div>
+
+    <div class="select-menu-modal-holder">
+      <div class="select-menu-modal select-menu-merge-method js-menu-content" aria-expanded="false">
+        <div class="select-menu-list js-navigation-container js-merge-method-menu js-active-navigation-container" role="menu">
+          <div class="select-menu-item js-navigation-item selected" role="menuitem" data-input-title-value="Merge pull request #52 from arraisbot/pullrequest-8fc7c3fd3" data-input-message-value="testing pr anonymization" id="anonydog-anonymous-pr-option">
+            <svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path></svg>
+            <input checked="checked" class="js-merge-method" name="do" type="radio" value="merge" id="anonydog-pr-check">
+            <div class="select-menu-item-text">
+              <span class="select-menu-item-heading js-select-button-text">Create anonymous pull request</span>
+              <span class="description">Pull request will be sent via anonydog. It may not be elected for anonymization.</span>
+            </div>
+          </div>
+
+          <div class="select-menu-item js-navigation-item" role="menuitem" data-input-title-value="testing pr anonymization (#52)" data-input-message-value="" id="anonydog-traditional-pr-option">
+            <svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path></svg>
+            <input class="js-merge-method" name="do" type="radio" value="squash" id="github-pr-check">
+            <div class="select-menu-item-text">
+              <span class="select-menu-item-heading js-select-button-text">Create traditional pull request</span>
+              <span class="description">
+                    Pull request will be sent using you usual GitHub handle. For sure.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+var createElement = function(html) {
+  var el = document.createElement('div');
+  el.innerHTML = html;
+  return el.childNodes[0];
+};
+
 var waitFor = function(selector, operation) {
   if (null != document.body.querySelector(selector)) {
     operation(document.body.querySelector(selector));
+    return;
   }
 
   var observer = new MutationObserver(function(mutations) {
@@ -27,24 +81,9 @@ var waitFor = function(selector, operation) {
 };
 
 var augmentPullRequestPage = function(github_pr_button, env) {
-  github_pr_button.classList.remove("btn-primary");
+  var pr_button_elem = createElement(pr_button_html);
 
-  var our_button_element = document.createElement("button");
-  our_button_element.setAttribute("id", "anonydog-pr");
-  our_button_element.setAttribute("class", "btn btn-primary");
-  our_button_element.setAttribute("type", "button");
-
-  our_button_element.appendChild(document.createTextNode("Create anonymous pull request"));
-
-  var bot_avatar_img_element = document.createElement("img");
-  bot_avatar_img_element.setAttribute("src", browser.extension.getURL("icons/anonydog-16.png"));
-  bot_avatar_img_element.setAttribute("style", "margin-left: 3px");
-  bot_avatar_img_element.setAttribute("width", "16");
-  bot_avatar_img_element.setAttribute("height", "16");
-
-  our_button_element.appendChild(bot_avatar_img_element);
-
-  github_pr_button.insertAdjacentElement("beforebegin", our_button_element);
+  github_pr_button.replaceWith(pr_button_elem);
 
   var deflect_pr = function() {
     // TODO: we're assuming this meta tag contains repo_user/repo_name. Test for that
@@ -141,7 +180,7 @@ var augmentPullRequestPage = function(github_pr_button, env) {
     compare_page_request.send();
   };
 
-  document.querySelector("#anonydog-pr").addEventListener("click", deflect_pr);
+  //document.querySelector("#anonydog-pr").addEventListener("click", deflect_pr);
 };
 
 waitFor(
