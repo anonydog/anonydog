@@ -1,43 +1,30 @@
-require 'redis'
+require 'mongo'
 
 module Anonydog
   module Data
     class PullRequestRepo
       def store_mapping(data)
-        contributor_pr = data[:contributorpr]
-        botpr = data[:botpr]
-
-        redis.hmset(
-          "botpr:#{botpr[:url]}",
-            "url", contributor_pr[:url],
-            "repo", contributor_pr[:repo],
-            "issue", contributor_pr[:issue]
-        )
-
-        redis.hmset(
-          "contributorpr:#{contributor_pr[:url]}",
-            "url", botpr[:url],
-            "repo", botpr[:repo],
-            "issue", botpr[:issue]
-        )
+        pull_requests.insert_one(data)
       end
 
       # fetch the contributor's pull request data corresponding to a bot PR url
       def contributor_pull_request(botpr_url)
-        h = redis.hgetall("botpr:#{botpr_url}")
-        h.inject({}) { |acc, entry| acc[entry[0].to_sym] = entry[1]; acc }
+        pr = pull_requests.find("botpr.url" => botpr_url).first
+        pr[:contributorpr]
       end
 
       # fetch the bot's pull request data corresponding to a contributor PR url
       def bot_pull_request(contributorpr_url)
-        h = redis.hgetall("contributorpr:#{contributorpr_url}")
-        h.inject({}) { |acc, entry| acc[entry[0].to_sym] = entry[1]; acc }
+        pr = pull_requests.find("contributorpr.url" => contributorpr_url).first
+        pr[:botpr]
       end
 
     private
 
-      def redis
-        @redis ||= Redis.new(url: ENV['REDIS_DATABASE_URL'])
+      def pull_requests
+        return @pull_requests unless @pull_requests.nil?
+        client = Mongo::Client.new(ENV['MONGO_DATABASE_URL'])
+        @pull_requests = client[:pull_requests]
       end
     end
   end

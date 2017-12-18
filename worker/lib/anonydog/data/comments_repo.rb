@@ -1,3 +1,5 @@
+require 'redis'
+
 module Anonydog
   module Data
     class CommentsRepo

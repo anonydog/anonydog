@@ -14,8 +14,12 @@ if [ -z ${GITHUB_SSH_KEY_PATH+x} ]; then
   echo "need GITHUB_SSH_KEY_PATH"
   exit
 fi
-if [ -z ${REDIS_DATABASE_URL+x} ]; then
-  echo "need REDIS_DATABASE_URL"
+if [ -z ${GITHUB_SSH_KEY_PASSPHRASE+x} ]; then
+  echo "need GITHUB_SSH_KEY_PASSPHRASE"
+  exit
+fi
+if [ -z ${MONGO_DATABASE_URL+x} ]; then
+  echo "need MONGO_DATABASE_URL"
   exit
 fi
 

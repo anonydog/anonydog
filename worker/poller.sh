@@ -10,6 +10,11 @@ if [ -z ${REDIS_DATABASE_URL+x} ]; then
   exit
 fi
 
+if [ -z ${MONGO_DATABASE_URL+x} ]; then
+  echo "need MONGO_DATABASE_URL"
+  exit
+fi
+
 WORK_DIR=$(cd "$(dirname "$0")"; pwd)
 BUNDLE_GEMFILE=$WORK_DIR/Gemfile
 BUNDLE_GEMFILE=$BUNDLE_GEMFILE bundle exec ruby -I $WORK_DIR/lib $WORK_DIR/lib/anonydog/poller.rb

@@ -10,6 +10,7 @@ gem "mustache", "~> 1.0"
 gem "bunny", "~> 2.6"
 gem "msgpack", "~> 1.1"
 gem "redis", "~> 3.3"
+gem "mongo", "~> 2.4"
 
 group :test do
   gem 'minitest', '~> 5.10'
