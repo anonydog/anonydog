@@ -25,7 +25,7 @@ openssl enc -aes-256-cbc -d -in $SELECTED_ENV_DIR/ssh_key.enc -out $SELECTED_ENV
 
 GITHUB_API_ACCESS_TOKEN=`openssl enc -aes-256-cbc -d -in $SELECTED_ENV_DIR/github_api_access_token.enc -k $SELECTED_ENV_PASSWORD`
 GITHUB_WEBHOOK_SECRET=`openssl enc -aes-256-cbc -d -in $SELECTED_ENV_DIR/github_webhook_secret.enc -k $SELECTED_ENV_PASSWORD`
-REDIS_DATABASE_URL=`openssl enc -aes-256-cbc -d -in $SELECTED_ENV_DIR/redis_database_url.enc -k $SELECTED_ENV_PASSWORD`
+MONGO_DATABASE_URL=`openssl enc -aes-256-cbc -d -in $SELECTED_ENV_DIR/mongo_database_url.enc -k $SELECTED_ENV_PASSWORD`
 GITHUB_SSH_KEY_PATH="$SELECTED_ENV_DIR/ssh_key"
 GITHUB_SSH_KEY_PASSPHRASE='' # Using empty passphrase for now. Rugged does not seem to support password-protected keys
 
@@ -33,6 +33,6 @@ env GITHUB_API_ACCESS_TOKEN=$GITHUB_API_ACCESS_TOKEN \
     GITHUB_WEBHOOK_SECRET=$GITHUB_WEBHOOK_SECRET \
     GITHUB_SSH_KEY_PATH=$GITHUB_SSH_KEY_PATH \
     GITHUB_SSH_KEY_PASSPHRASE=$GITHUB_SSH_KEY_PASSPHRASE \
-    REDIS_DATABASE_URL=$REDIS_DATABASE_URL \
+    MONGO_DATABASE_URL=$MONGO_DATABASE_URL \
     RACK_ENV=production \
     thin start -c $BIN_DIR -C $BIN_DIR/webhook.thin.yml

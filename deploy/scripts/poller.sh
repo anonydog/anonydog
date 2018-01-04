@@ -22,7 +22,9 @@ echo
 
 GITHUB_API_ACCESS_TOKEN=`openssl enc -aes-256-cbc -d -in $SELECTED_ENV_DIR/github_api_access_token.enc -k $SELECTED_ENV_PASSWORD`
 REDIS_DATABASE_URL=`openssl enc -aes-256-cbc -d -in $SELECTED_ENV_DIR/redis_database_url.enc -k $SELECTED_ENV_PASSWORD`
+MONGO_DATABASE_URL=`openssl enc -aes-256-cbc -d -in $SELECTED_ENV_DIR/mongo_database_url.enc -k $SELECTED_ENV_PASSWORD`
 
 env GITHUB_API_ACCESS_TOKEN=$GITHUB_API_ACCESS_TOKEN \
     REDIS_DATABASE_URL=$REDIS_DATABASE_URL \
+    MONGO_DATABASE_URL=$MONGO_DATABASE_URL \
     $MAIN
