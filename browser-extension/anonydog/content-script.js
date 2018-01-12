@@ -121,19 +121,7 @@ var augmentPullRequestPage = function(github_pr_button, env) {
   };
 
   var request_fork = function(user, repo, callback) {
-    var request_fork_request = new XMLHttpRequest();
-
-    request_fork_request.onload = function() {
-      callback();
-    };
-
-    request_fork_request.open("POST", env.webapp_url + "/fork");
-
-    var post_data = new FormData();
-    post_data.append("user", user);
-    post_data.append("repo", repo);
-
-    request_fork_request.send(post_data);
+    chrome.runtime.sendMessage({user, repo}, callback);
   };
 
   var open_pr = function(dest_user, dest_repo_name) {
@@ -193,7 +181,7 @@ waitFor(
       {
         "env": {
           bot_user: "anonydog",
-          webapp_url: "http://anonydog.org"
+          webapp_url: "https://anonydog.org"
         }
       }
     ).

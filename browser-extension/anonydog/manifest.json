@@ -20,7 +20,7 @@
     },
 
     "permissions": [
-        "*://*.anonydog.org/",
+        "*://*.anonydog.org/*",
         "storage"
     ],
 
@@ -31,9 +31,16 @@
         ],
         "js": [
             "browser-polyfill.min.js",
-            "anonydog.js"
+            "content-script.js"
         ]
     }],
+
+    "background": {
+        "scripts": [
+            "browser-polyfill.min.js",
+            "background.js"
+        ]
+    },
 
     "web_accessible_resources": [
         "icons/anonydog-16.png"
