@@ -87,6 +87,9 @@ var augmentPullRequestPage = function(github_pr_button, env) {
 
   github_pr_button.replaceWith(pr_button_elem);
 
+  var anonydog_pr_button = document.querySelector("#anonydog-pr-button");
+  var github_pr_button = document.querySelector("#github-pr-button");
+
   var deflect_pr = function() {
     // TODO: we're assuming this meta tag contains repo_user/repo_name. Test for that
     var repo_full_name = document.head.querySelector('meta[name="octolytics-dimension-repository_nwo"]').content,
@@ -123,6 +126,10 @@ var augmentPullRequestPage = function(github_pr_button, env) {
   };
 
   var request_fork = function(user, repo, callback) {
+    //visual cue that we're working
+    document.body.style.cursor = "wait";
+    anonydog_pr_button.style.cursor = "wait";
+    //pokes background script to request an anonymous fork
     chrome.runtime.sendMessage({user, repo}, callback);
   };
 
@@ -172,8 +179,8 @@ var augmentPullRequestPage = function(github_pr_button, env) {
 
   var traditional_pr = () => document.querySelector("form#new_pull_request").submit();
 
-  document.querySelector("#anonydog-pr-button").addEventListener("click", deflect_pr);
-  document.querySelector("#github-pr-button").addEventListener("click", traditional_pr);
+  anonydog_pr_button.addEventListener("click", deflect_pr);
+  github_pr_button.addEventListener("click", traditional_pr);
 };
 
 waitFor(
