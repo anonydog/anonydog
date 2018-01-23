@@ -25,7 +25,9 @@ var pr_button_html = `<div class="js-merge-pr js-pull-merging merge-pr is-mergin
             <input checked="checked" class="js-merge-method" name="do" type="radio" value="merge" id="anonydog-pr-check">
             <div class="select-menu-item-text">
               <span class="select-menu-item-heading js-select-button-text">Create anonymous pull request</span>
-              <span class="description">Pull request will be sent via anonydog. It may not be elected for anonymization.</span>
+              <span class="description">
+                Pull request will be anonymized and sent via <strong>anonydog</strong>.
+              </span>
             </div>
           </div>
 
@@ -35,7 +37,7 @@ var pr_button_html = `<div class="js-merge-pr js-pull-merging merge-pr is-mergin
             <div class="select-menu-item-text">
               <span class="select-menu-item-heading js-select-button-text">Create traditional pull request</span>
               <span class="description">
-                    Pull request will be sent using you usual GitHub handle. For sure.
+                    Pull request will be sent using your normal GitHub handle.
               </span>
             </div>
           </div>
