@@ -1,3 +1,7 @@
+chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
+    chrome.tabs.executeScript(null,{file:"content-script.js"});
+});
+
 chrome.runtime.onMessage.addListener(
   function(message, sender, sendResponse) {
     browser.storage.local.get(

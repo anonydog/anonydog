@@ -21,13 +21,15 @@
 
     "permissions": [
         "*://*.anonydog.org/*",
-        "storage"
+        "*://github.com/*",
+        "storage",
+        "tabs",
+        "webNavigation"
     ],
 
     "content_scripts": [{
         "matches": [
-            "*://github.com/*/compare",
-            "*://github.com/*/compare/*"
+            "*://github.com/*"
         ],
         "js": [
             "browser-polyfill.min.js",
