@@ -10,17 +10,25 @@ chrome.runtime.onMessage.addListener(
     ).
     then(function(stored_values) {
       var env = stored_values.env;
-      var request_fork_request = new XMLHttpRequest();
-
-      request_fork_request.onload = sendResponse;
-
-      request_fork_request.open("POST", env.webapp_url + "/fork");
 
       var post_data = new FormData();
       post_data.append("user", message.user);
       post_data.append("repo", message.repo);
 
-      request_fork_request.send(post_data);
+      const opts = {
+        method: "POST",
+        body: post_data
+      };
+      fetch(env.webapp_url + "/fork", opts).
+      then(
+        function(e) {
+          sendResponse({"success": "ok"});
+        }
+      ).catch(
+        function(e) {
+          sendResponse({"error": e.message});
+        }
+      );
     });
     return true;
   }

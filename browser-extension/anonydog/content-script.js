@@ -126,11 +126,21 @@ var augmentPullRequestPage = function(github_pr_button, env) {
   };
 
   var request_fork = function(user, repo, callback) {
+    const body_cursor = document.body.style.cursor;
+    const pr_button_cursor = anonydog_pr_button.style.cursor;
     //visual cue that we're working
     document.body.style.cursor = "wait";
     anonydog_pr_button.style.cursor = "wait";
     //pokes background script to request an anonymous fork
-    chrome.runtime.sendMessage({user, repo}, callback);
+    chrome.runtime.sendMessage({user, repo}, function(response) {
+      if (response.success) {
+        callback();
+      } else {
+        document.body.style.cursor = body_cursor;
+        anonydog_pr_button.style.cursor = pr_button_cursor;
+        alert("We're experiencing some connectivity problems. Please try again later.");
+      }
+    });
   };
 
   var open_pr = function(dest_user, dest_repo_name) {
