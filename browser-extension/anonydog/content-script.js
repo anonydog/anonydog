@@ -83,6 +83,11 @@ var waitFor = function(selector, operation) {
 };
 
 var augmentPullRequestPage = function(github_pr_button, env) {
+  if (document.querySelector("#anonydog-pr-button")) {
+    //code already run sometime in the past. abort.
+    return;
+  }
+
   var pr_button_elem = createElement(pr_button_html);
 
   github_pr_button.replaceWith(pr_button_elem);
