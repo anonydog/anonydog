@@ -1,53 +1,53 @@
-var pr_button_html = `<div class="js-merge-pr js-pull-merging merge-pr is-merging" data-url="/bogus" style="block-size: 0px; border-top: 0px none; height: 0px; margin-top: 0px; padding-top: 0px;">
-  <div class="select-menu d-inline-block js-menu-container js-select-menu js-transitionable" style="float: right; box-sizing: content-box; display: block; visibility: visible;" id="anonydog-select-menu">
-    <div style="display: none">
-      <input type="text" class="js-merge-title" />
-      <textarea class="js-merge-message" >
-      </textarea>
-    </div>
+var createPullRequestButtonElement = function() {
+  const html = `<div class="js-merge-pr js-pull-merging merge-pr is-merging" data-url="/bogus" style="block-size: 0px; border-top: 0px none; height: 0px; margin-top: 0px; padding-top: 0px;">
+    <div class="select-menu d-inline-block js-menu-container js-select-menu js-transitionable" style="float: right; box-sizing: content-box; display: block; visibility: visible;" id="anonydog-select-menu">
+      <div style="display: none">
+        <input type="text" class="js-merge-title" />
+        <textarea class="js-merge-message" >
+        </textarea>
+      </div>
 
-    <div class="BtnGroup btn-group-merge">
-      <button type="button" class="btn btn-primary BtnGroup-item js-details-target" aria-expanded="false" data-details-container=".js-merge-pr" style="float: none" id="anonydog-pr-button">
-        Create anonymous pull request
-      </button><button class="btn btn-primary select-menu-button BtnGroup-item js-menu-target" style="float: none" type="button" aria-label="Select merge method" aria-haspopup="true" aria-expanded="false"></button>
-    </div>
-    <div class="BtnGroup btn-group-squash">
-      <button type="submit" class="btn btn-primary BtnGroup-item js-details-target" aria-expanded="false" data-details-container=".js-merge-pr" style="float: none" id="github-pr-button">
-        Create pull request
-      </button><button class="btn btn-primary select-menu-button BtnGroup-item js-menu-target" style="float: none" type="button" aria-label="Select merge method" aria-haspopup="true" aria-expanded="false"></button>
-    </div>
+      <div class="BtnGroup btn-group-merge">
+        <button type="button" class="btn btn-primary BtnGroup-item js-details-target" aria-expanded="false" data-details-container=".js-merge-pr" style="float: none" id="anonydog-pr-button">
+          Create anonymous pull request
+        </button><button class="btn btn-primary select-menu-button BtnGroup-item js-menu-target" style="float: none" type="button" aria-label="Select merge method" aria-haspopup="true" aria-expanded="false"></button>
+      </div>
+      <div class="BtnGroup btn-group-squash">
+        <button type="submit" class="btn btn-primary BtnGroup-item js-details-target" aria-expanded="false" data-details-container=".js-merge-pr" style="float: none" id="github-pr-button">
+          Create pull request
+        </button><button class="btn btn-primary select-menu-button BtnGroup-item js-menu-target" style="float: none" type="button" aria-label="Select merge method" aria-haspopup="true" aria-expanded="false"></button>
+      </div>
 
-    <div class="select-menu-modal-holder">
-      <div class="select-menu-modal select-menu-merge-method js-menu-content" aria-expanded="false">
-        <div class="select-menu-list js-navigation-container js-merge-method-menu js-active-navigation-container" role="menu">
-          <div class="select-menu-item js-navigation-item selected" role="menuitem" data-input-title-value="Merge pull request #52 from arraisbot/pullrequest-8fc7c3fd3" data-input-message-value="testing pr anonymization" id="anonydog-anonymous-pr-option">
-            <svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path></svg>
-            <input checked="checked" class="js-merge-method" name="do" type="radio" value="merge" id="anonydog-pr-check">
-            <div class="select-menu-item-text">
-              <span class="select-menu-item-heading js-select-button-text">Create anonymous pull request</span>
-              <span class="description">
-                Pull request will be anonymized and sent via <strong>anonydog</strong>.
-              </span>
+      <div class="select-menu-modal-holder">
+        <div class="select-menu-modal select-menu-merge-method js-menu-content" aria-expanded="false">
+          <div class="select-menu-list js-navigation-container js-merge-method-menu js-active-navigation-container" role="menu">
+            <div class="select-menu-item js-navigation-item selected" role="menuitem" data-input-title-value="Merge pull request #52 from arraisbot/pullrequest-8fc7c3fd3" data-input-message-value="testing pr anonymization" id="anonydog-anonymous-pr-option">
+              <svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path></svg>
+              <input checked="checked" class="js-merge-method" name="do" type="radio" value="merge" id="anonydog-pr-check">
+              <div class="select-menu-item-text">
+                <span class="select-menu-item-heading js-select-button-text">Create anonymous pull request</span>
+                <span class="description">
+                  Pull request will be anonymized and sent via <strong>anonydog</strong>.
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div class="select-menu-item js-navigation-item" role="menuitem" data-input-title-value="testing pr anonymization (#52)" data-input-message-value="" id="anonydog-traditional-pr-option">
-            <svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path></svg>
-            <input class="js-merge-method" name="do" type="radio" value="squash" id="github-pr-check">
-            <div class="select-menu-item-text">
-              <span class="select-menu-item-heading js-select-button-text">Create traditional pull request</span>
-              <span class="description">
-                    Pull request will be sent using your normal GitHub handle.
-              </span>
+            <div class="select-menu-item js-navigation-item" role="menuitem" data-input-title-value="testing pr anonymization (#52)" data-input-message-value="" id="anonydog-traditional-pr-option">
+              <svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path></svg>
+              <input class="js-merge-method" name="do" type="radio" value="squash" id="github-pr-check">
+              <div class="select-menu-item-text">
+                <span class="select-menu-item-heading js-select-button-text">Create traditional pull request</span>
+                <span class="description">
+                      Pull request will be sent using your normal GitHub handle.
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>`;
+  </div>`;
 
-var createElement = function(html) {
   var el = document.createElement('div');
   el.innerHTML = html;
   return el.childNodes[0];
@@ -88,7 +88,7 @@ var augmentPullRequestPage = function(github_pr_button, env) {
     return;
   }
 
-  var pr_button_elem = createElement(pr_button_html);
+  var pr_button_elem = createPullRequestButtonElement();
 
   github_pr_button.replaceWith(pr_button_elem);
 
