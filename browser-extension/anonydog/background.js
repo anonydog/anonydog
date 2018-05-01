@@ -15,25 +15,67 @@ chrome.runtime.onMessage.addListener(
     then(function(stored_values) {
       var env = stored_values.env;
 
-      var post_data = new FormData();
-      post_data.append("user", message.user);
-      post_data.append("repo", message.repo);
+      if (message.type === "deflect_pr") {
+        const { repo_full_name, title, body, branch } = message;
 
-      const opts = {
-        method: "POST",
-        body: post_data
-      };
-      fetch(env.webapp_url + "/fork", opts).
-      then(
-        function(e) {
-          sendResponse({"success": "ok"});
-        }
-      ).catch(
-        function(e) {
-          sendResponse({"error": e.message});
-        }
-      );
+        deflectPR(env, repo_full_name, title, body, branch)
+          .then((url) => sendResponse({success: "ok", url}))
+          .catch(() => sendResponse({error: "unknown"}))
+      }
     });
+
+    //FIXME: return a promise instead of calling sendResponse as per https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/onMessage
     return true;
   }
 );
+
+
+const openPR = (destUser, destRepoName, title, body, branch) => (accessToken) => {
+  const requestURL = `https://api.github.com/repos/${destUser}/${destRepoName}/pulls`;
+  const requestHeaders = new Headers();
+  requestHeaders.append('Authorization', 'token ' + accessToken);
+  requestHeaders.append('Content-Type', 'application/json');
+
+  const requestBody = {
+    title,
+    body,
+    head: branch,
+    base: "master"
+  };
+
+  const prApiRequest = new Request(requestURL, {
+    method: "POST",
+    headers: requestHeaders,
+    body: JSON.stringify(requestBody)
+  });
+
+  return fetch(prApiRequest)
+    .then((response) => response.json())
+    .then((ghJson) => ghJson.html_url)
+};
+
+var deflectPR = function(env, repo_full_name, title, body, branch) {
+  const parts = repo_full_name.split('/');
+  const [repo_user, repo_name] = parts;
+
+  return request_fork(env, repo_user, repo_name)
+    .then(() => open_pr(env.bot_user, repo_name, title, body, branch))
+};
+
+var request_fork = function(env, user, repo) {
+  var post_data = new FormData();
+  post_data.append("user", user);
+  post_data.append("repo", repo);
+
+  const opts = {
+    method: "POST",
+    body: post_data
+  };
+
+  return fetch(env.webapp_url + "/fork", opts);
+};
+
+var open_pr = function(dest_user, dest_repo_name, title, body, branch) {
+  return getAccessToken()
+    .then(openPR(dest_user, dest_repo_name, title, body, branch))
+};

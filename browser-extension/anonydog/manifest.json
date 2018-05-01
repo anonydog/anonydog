@@ -24,7 +24,8 @@
         "*://github.com/*",
         "storage",
         "tabs",
-        "webNavigation"
+        "webNavigation",
+        "identity"
     ],
 
     "content_scripts": [{
@@ -40,6 +41,7 @@
     "background": {
         "scripts": [
             "browser-polyfill.min.js",
+            "authorize.js",
             "background.js"
         ]
     },
