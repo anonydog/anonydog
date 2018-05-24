@@ -1,0 +1,9 @@
+Notes for Reviewer
+==================
+
+This addon includes code from the webextension-polyfill project. It is used to
+polyfill some Mozilla APIs into Chrome.
+
+The minified source is at `browser-polyfill.js`
+
+Source code for webextension-polyfill can be found at https://github.com/mozilla/webextension-polyfill
