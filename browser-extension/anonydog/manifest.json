@@ -12,6 +12,8 @@
         }
     },
 
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwNomLUDlt6N9FDoacz0MByf0WDfhTVu8Wmz5Bvq0dZcNyy+QdNKYpLmmaxlwCFusIPaoZJaXcp0uaLolAVRc4h8KzrH63mvVhqeoH+vthqHIRo5iCimNM88QYTQaXJKx/CwKs7FA4e+h+Il20F/9+8H8P65LQEq/gY0C2ti9+HyYf6qmnZBDaX+B+FtMBoo7KUX1pWku7qbkiirJ5HJSMw0hbUDVf/9tpdkXHiJS9x0dlMTpHsPKGS9aA560Y5ksQ+8j/S1JpEOsH3tFdFLJMBLl9AVqOo4rHNVfSs+kK1ynbSTKPhBg6EbL2xpv+igSWPqzQ3Xyp57HOEhE0bVYRwIDAQAB",
+
     "icons": {
         "16": "icons/anonydog-16.png",
         "48": "icons/anonydog-48.png",
@@ -22,6 +24,8 @@
     "permissions": [
         "*://*.anonydog.org/*",
         "*://github.com/*",
+        "https://anonydog-auth-firefox.glitch.me/",
+        "https://anonydog-auth-chrome.glitch.me/",
         "storage",
         "tabs",
         "webNavigation",

@@ -1,12 +1,19 @@
 /* exported getAccessToken */
 
 const REDIRECT_URL = browser.identity.getRedirectURL();
-const CLIENT_ID = "92e28d0045609221a09d"; //FIXME: bogus id. change (and store somewhere safe?)
-const CLIENT_SECRET = "a7fdfab8c5e2d0d8dd6c32c9ea5dc9e89298bad8"; //FIXME: bogus secret. change (and definetely store somewhere safe)
+const CLIENT_ID = {
+  "Firefox" : "f036b9db6ca8625de48c",
+  "Chrome"  : "3166dac17185933355e5"
+};
+const VALIDATION_URL = {
+  "Firefox": "https://anonydog-auth-firefox.glitch.me/",
+  "Chrome": "https://anonydog-auth-chrome.glitch.me/"
+};
+
 const SCOPES = ["user", "repo"];
-const AUTH_URL =
-`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URL)}&scope=${encodeURIComponent(SCOPES.join(' '))}`;
-const VALIDATION_BASE_URL=`https://github.com/login/oauth/access_token`;
+const AUTH_URL = (clientID, redirectURL, scopes) => (
+  `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(redirectURL)}&scope=${encodeURIComponent(scopes.join(' '))}`
+);
 
 function extractCode(redirectUri) {
   let m = redirectUri.match(/[#?](.*)/);
@@ -33,19 +40,20 @@ function validate(redirectURL) {
   if (!code) {
     throw "Authorization failure";
   }
-  const validationURL = `${VALIDATION_BASE_URL}`;
   const requestHeaders = new Headers();
   requestHeaders.append('Accept', 'application/json');
   requestHeaders.append('Content-Type', 'application/json');
-  const validationRequest = new Request(validationURL, {
-    method: "POST",
-    headers: requestHeaders,
-    body: JSON.stringify({
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      code
-    })
-  });
+  const validationRequest = (browserName) => {
+    const validationURL = VALIDATION_URL[browserName];
+
+    return new Request(validationURL, {
+      method: "POST",
+      headers: requestHeaders,
+      body: JSON.stringify({
+        code
+      })
+    });
+  };
 
   function checkResponse(response) {
     return new Promise((resolve, reject) => {
@@ -62,7 +70,27 @@ function validate(redirectURL) {
     });
   }
 
-  return fetch(validationRequest).then(checkResponse);
+  return currentBrowserName()
+    .then((name) => fetch(validationRequest(name)))
+    .then(checkResponse);
+}
+
+function currentBrowserName() {
+  if (!browser.runtime.getBrowserInfo) {
+    // assume we're in Chrome since the Firefox API isn't available
+    return Promise.resolve("Chrome");
+  } else {
+    return browser.runtime.getBrowserInfo()
+      .then(({name}) => name);
+  }
+}
+
+function authURLForCurrentBrowser() {
+  return currentBrowserName()
+    .then((name) => {
+      const url = AUTH_URL(CLIENT_ID[name], REDIRECT_URL, SCOPES);
+      return url;
+    });
 }
 
 /**
@@ -71,10 +99,13 @@ If successful, this resolves with a redirectURL string that contains
 an access token.
 */
 function authorize() {
-  return browser.identity.launchWebAuthFlow({
-    interactive: true,
-    url: AUTH_URL
-  });
+  return authURLForCurrentBrowser()
+    .then((authURL) => (
+      browser.identity.launchWebAuthFlow({
+        interactive: true,
+        url: authURL
+      })
+    ));
 }
 
 function getAccessToken() {
