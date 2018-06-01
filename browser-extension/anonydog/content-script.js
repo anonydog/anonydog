@@ -134,7 +134,7 @@ const deflectPR = () => {
     } else {
       document.body.style.cursor = body_cursor;
       anonydog_pr_button.style.cursor = pr_button_cursor;
-      alert("We're experiencing some connectivity problems. Please try again later.");
+      alert("Anonydog is experiencing some connectivity problems. Please try again later.");
     }
   });
 };
