@@ -2,30 +2,29 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
     chrome.tabs.executeScript(null,{file:"content-script.js"});
 });
 
-chrome.runtime.onMessage.addListener(
-  function(message, sender, sendResponse) {
-    browser.storage.local.get(
+browser.runtime.onMessage.addListener(
+  function(message, sender) {
+    return browser.storage.local.get(
       {
         "env": {
           bot_user: "anonydog",
           webapp_url: "https://anonydog.org"
         }
       }
-    ).
-    then(function(stored_values) {
+    )
+    .then(function(stored_values) {
       var env = stored_values.env;
 
       if (message.type === "deflect_pr") {
         const { repo_full_name, title, body, branch } = message;
 
-        deflectPR(env, repo_full_name, title, body, branch)
-          .then((url) => sendResponse({success: "ok", url}))
-          .catch(() => sendResponse({error: "unknown"}))
+        return deflectPR(env, repo_full_name, title, body, branch)
+          .catch(() => Promise.reject({error: "unknown"}));
+      } else {
+        return Promise.reject({error: "could not understand message"});
       }
-    });
-
-    //FIXME: return a promise instead of calling sendResponse as per https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/onMessage
-    return true;
+    })
+    .then((url) => ({success: "ok", url}));
   }
 );
 

@@ -23,18 +23,6 @@ function extractCode(redirectUri) {
   return params.get("code");
 }
 
-/**
-Validate the token contained in redirectURL.
-This follows essentially the process here:
-https://developers.google.com/identity/protocols/OAuth2UserAgent#tokeninfo-validation
-- make a GET request to the validation URL, including the access token
-- if the response is 200, and contains an "aud" property, and that property
-matches the clientID, then the response is valid
-- otherwise it is not valid
-
-Note that the Google page talks about an "audience" property, but in fact
-it seems to be "aud".
-*/
 function validate(redirectURL) {
   const code = extractCode(redirectURL);
   if (!code) {
