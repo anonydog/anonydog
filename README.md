@@ -56,7 +56,7 @@ This project exists thanks to all the people who contribute. [[Contribute]](CONT
 
 Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/anonydog#backer)]
 
-<a href="https://opencollective.com/anonydog#backers" target="_blank"><img src="https://avatars2.githubusercontent.com/u/1038736?s=74&amp;v=4><img src="https://opencollective.com/anonydog/backers.svg?width=890"></a>
+<a href="https://opencollective.com/anonydog#backers" target="_blank"><img src="https://avatars2.githubusercontent.com/u/1038736?s=74&amp;v=4"><img src="https://opencollective.com/anonydog/backers.svg?width=890"></a>
 
 
 ## Sponsors
