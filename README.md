@@ -10,7 +10,7 @@ requests? I can shed some light on that question!
 I'm a bot (or a dog -- you'll never know for sure) that helps you stay
 anonymous on github.
 
-To use me, add the anonydog extession to your browser (available on [Firefox][3] and [Chrome][4]) and select "anonymous pull request" when opening your next PR.
+To use me, add the anonydog extesion to your browser (available on [Firefox][3] and [Chrome][4]) and select "anonymous pull request" when opening your next PR.
 
 If you'd rather do the process manually:
 
