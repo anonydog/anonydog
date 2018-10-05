@@ -47,7 +47,7 @@
       </div>
     </nav>
 
-<section class="anonydog-section " style="height:91vh !important" >
+<section class="anonydog-section anonydog-section-alt" style="height:91vh !important" >
     <div class="container">
 
 
@@ -69,7 +69,7 @@
         <div class="col-sm-6 col-xs-10">
            <div class="panel panel-default">
             <div class="panel-heading anonydog-black">
-             anony <strong>dog</strong>said right now
+             anony<strong>dog</strong> said right now
             </div>
             <div class="panel-body">
               <p>
