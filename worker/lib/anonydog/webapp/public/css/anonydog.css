@@ -19,6 +19,17 @@ body:after{
   transform:rotate(-45deg);
   z-index: 10000;
 }
+.anonydog-overlay {
+opacity: 0.3;
+width: 100vw;
+position: absolute;
+display: block;
+height: 100vh;
+background-image: url("img/background.png") !important;
+right: 0px;
+background-size: cover;
+background-position: 80% 80%;
+}
 
 
 .anonydog-grey {
@@ -77,4 +88,11 @@ input,
 textarea,
 .panel {
 border: 1px solid black !important;
+}
+
+footer {
+margin:0px !important; 
+padding:15px;
+ align-text:center;
+ margin-top: 50px;
 }

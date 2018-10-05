@@ -47,7 +47,9 @@
       </div>
     </nav>
 <section class="anonydog-section anonydog-black" >
- <div class="container">
+<div class="anonydog-overlay" atyle="
+background-image: url('img/background.png') !important;" ></div>
+ <div class="container" style="position:absolute">
  <img src="img/logo.jpg" class="img-circle" style="width:125px; height: 125px; ">
         <h1>anony<strong>dog</strong></h1>
         <h3>On the internet, nobody knows you're a dog.</h3>
@@ -56,9 +58,11 @@
 <i class="fa fa-angle-double-down fa-2x w3-animate-fading" style="margin-top:50px" aria-hidden="true"></i>
 
       </div>
+      
+
 </section>
 
-<section class="anonydog-section anonydog-section-mini anonydog-grey" >
+<section class="anonydog-section anonydog-section-mini anonydog-black" >
  <div class="container">
  <div class="row">
 <div class="col-sm-10 col-sm-offset-1">
@@ -71,7 +75,7 @@
  </div>	
         
 </section>
-<section class="anonydog-section" style="height:70vh !important" >
+<section class="anonydog-section anonydog-section-mini"  >
  <div class="container">
 
              <div class="row anonydog-details" style="margin-top:25px">
@@ -112,7 +116,7 @@
 </section>
 
 
-      <footer class="anonydog-black	" style="margin:0px !important; padding:15px; align-text:center">
+      <footer class="anonydog-black	" style="r">
         <p>&copy; 2017 anonydog</p>
       </footer>
 
