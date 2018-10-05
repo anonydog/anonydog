@@ -69,7 +69,7 @@
         <div class="col-sm-6 col-xs-10">
           <div class="panel panel-default">
             <div class="panel-heading anonydog-black">
-              anony<strong>dog</strong> said right now</span>
+              <strong>anonydog</strong> <span class="text-muted">said right now</span>
             </div>
             <div class="panel-body text-white">
               <p>
