@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=K2D');
+*:not(i){
+font-family: 'K2D', sans-serif !important;
+}
 /* beta ribbon */
 body:after{
   content: "alpha";
@@ -54,6 +58,8 @@ height: 100vh !important;
 position:relative;
 padding:20px;
 margin:0px;
+
+    min-height: 700px;
 }
 
 section.anonydog-section.anonydog-section-alt
@@ -63,6 +69,7 @@ section.anonydog-section.anonydog-section-alt
 }
 section.anonydog-section.anonydog-section-mini {
 height:auto !important;
+    min-height: 400px !important;
 }
 section.anonydog-section > .container {
 margin:50px auto;
@@ -116,4 +123,19 @@ margin:0px !important;
 padding:15px;
  align-text:center;
  margin-top: 50px;
+}
+
+.panel-body{
+    overflow: hidden;
+	}
+
+	.w3-animate-fading {
+    animation: fading 4s infinite!important;
+}
+
+ul.social-media {
+	list-style: none;
+}
+ul.social-media > li {
+display:inline-block
 }
