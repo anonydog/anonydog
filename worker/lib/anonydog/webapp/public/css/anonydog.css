@@ -126,6 +126,7 @@ padding:15px;
 }
 
 .panel-body{
+	text-align:left;
     overflow: hidden;
 	}
 
