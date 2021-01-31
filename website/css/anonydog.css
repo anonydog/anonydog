@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css?family=K2D');
+*:not(i){
+font-family: 'K2D', sans-serif !important;
+}
+/* beta ribbon */
+body:after{
+  content: "alpha";
+  position: fixed;
+  width: 140px;
+  height: 25px;
+  background: #EE8E4A;
+  top: 24px;
+  left: -30px;
+  text-align: center;
+  font-size: 13px;
+  font-family: sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #fff;
+  line-height: 27px;
+  -ms-transform:rotate(-45deg);
+  -webkit-transform:rotate(-45deg);
+  transform:rotate(-45deg);
+  z-index: 10000;
+}
+.anonydog-overlay {
+opacity: 0.3;
+width: 100vw;
+position: absolute;
+display: block;
+height: 100vh;
+right: 0px;
+background-size: cover;
+background-position: 80% 80%;
+}
+
+.container
+{
+height:100%;
+width:100%;
+}
+
+.anonydog-grey {
+
+color:white !important;
+background: rgb(76,76,76) !important;
+background-color: rgb(76,76,76) !important;
+}
+
+.anonydog-black {
+
+color:white !important;
+background: #000 !important;
+background-color:#000 !important;
+}
+section.anonydog-section {
+height: 100vh !important;
+position:relative;
+padding:20px;
+margin:0px;
+
+    min-height: 700px;
+}
+
+section.anonydog-section.anonydog-section-alt
+{
+   min-height: 91vh !important;
+    height: auto !important;
+}
+section.anonydog-section.anonydog-section-mini {
+height:auto !important;
+    min-height: 400px !important;
+}
+section.anonydog-section > .container {
+margin:50px auto;
+padding:40px;
+text-align:center;
+}
+
+.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+margin-left : 45px !important;
+color: white !important;
+}
+
+@media (max-width: 768px) {
+.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+margin-left : 80px !important;
+color: white !important;
+}
+}
+
+.btn-anonydog {
+background: #000 !important;
+background-color: #000 !important;
+color: white !important;
+border-color:white !important;
+transition: all .8 ease;
+}
+
+a.btn-anonydog:hover{
+background: rgb(76,76,76) !important;
+background-color: rgb(76,76,76) !important;
+color: white !important;
+}
+
+.anonydog-details{
+}
+
+.anonydog-details > div > p {
+
+    text-align: justify;  
+font-size:12px
+}
+
+input,
+textarea,
+.panel {
+border: 1px solid black !important;
+}
+
+footer {
+margin:0px !important;
+padding:15px;
+ align-text:center;
+ margin-top: 50px;
+}
+
+.panel-body{
+	text-align:left;
+    overflow: hidden;
+	}
+
+	.w3-animate-fading {
+    animation: fading 4s infinite!important;
+}
+
+ul.social-media {
+	list-style: none;
+}
+ul.social-media > li {
+display:inline-block
+}
