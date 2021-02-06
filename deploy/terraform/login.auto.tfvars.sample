@@ -1,2 +1,7 @@
 # Get one at https://vercel.com/account/tokens
 vercel_token = "secret_vercel_token"
+
+# Get a pair at https://console.aws.amazon.com/iam/home#/users
+# This user needs to be able to manage AWS Resources
+aws_access_key = "aws_access_key"
+aws_secret_key = "aws_secret_key"
