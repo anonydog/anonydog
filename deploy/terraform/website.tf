@@ -6,6 +6,12 @@ resource "wercel_project" "website" {
   }
 }
 
+resource "wercel_environment_variable" "website_role_arn" {
+  project_id = wercel_project.website.id
+  key = "SNS_TOPIC_ROLE_ARN"
+  value = aws_iam_role.sns_role.arn
+}
+
 resource "wercel_environment_variable" "website_access_key" {
   project_id = wercel_project.website.id
   key = "SNS_TOPIC_ACCESS_KEY"
