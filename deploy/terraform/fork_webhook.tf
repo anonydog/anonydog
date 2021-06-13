@@ -17,7 +17,7 @@ resource "wercel_environment_variable" "fork_webhook_github_webhook_endpoint" {
   project_id = wercel_project.fork_webhook.id
 
   key = "GITHUB_WEBHOOK_ENDPOINT"
-  value = "https://github-webhook.anonydog.vercel.app/api/hook"
+  value = local.github_webhook_url
 }
 
 resource "wercel_environment_variable" "fork_webhook_github_secret" {

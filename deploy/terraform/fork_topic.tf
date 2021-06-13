@@ -19,7 +19,7 @@ resource "aws_sns_topic" "webhook_topic" {
 
 resource "aws_sns_topic_subscription" "fork_webhook_subscription" {
     topic_arn = aws_sns_topic.fork_topic.arn
-    endpoint  = "https://${wercel_project.fork_webhook.name}.anonydog.vercel.app/api/fork"
+    endpoint  = "https://${wercel_project.fork_webhook.name}.vercel.app/api/fork"
 
     protocol  = "https"
     endpoint_auto_confirms = true
