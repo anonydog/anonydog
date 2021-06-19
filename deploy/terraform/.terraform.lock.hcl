@@ -43,6 +43,18 @@ provider "registry.terraform.io/thiagoarrais/wercel" {
   version     = "0.1.1"
   constraints = "0.1.1"
   hashes = [
-    "h1:ZSMsXysQ/pESWOsEF18i2uv2ddwOAVlLNAT60flpcXs=",
+    "h1:RL+1O59BnCWR83Nh9jduM6qFel8VWiQfCA5xrPtPzgc=",
+    "zh:40fa65fd035c4f4458084d6a45a28895aa2d1c0f30786f7801e917e888ac83ba",
+    "zh:45b0d0b1bbc9cd84e5f99c8e275d6a1a898b0acd140ff5c127ead596e3a34059",
+    "zh:5fa2f973c68dad5f6d174deb6b06f64221d8355a2e99eeb7343c6bdd36e69889",
+    "zh:6526761b68caa97b2229d87d02a224acae20f3e8104a9e61c70562b7f38f92eb",
+    "zh:6c34336b4399d0fec44b9e74f455865c7faae3ab4058ba72e30192e72d37ff33",
+    "zh:743d6e5830592215196168cec6730ad526055a4d904cc01358198980f2bdb2a6",
+    "zh:775fcc1fd705ded8eace464dfd7f3f5b81bce82fb5b4aa34073ca0422f3fed4e",
+    "zh:82a38ad0433249575112f55e7af6cbe17f1433ba51db760cd70f446c525f210d",
+    "zh:8c0dd8ef513ca9f797e9e80d980a68197a55a12d816a224ebe22fb86b4557b7f",
+    "zh:9640196208cdc956036a93f35c768641538df1975236afdf7b23d757f82e9924",
+    "zh:bcc2a7d9abdcd6da359bdca8195cc8d3911fe37eebf4953b41d8c52fc08cdf76",
+    "zh:ce448a3f41f3b9f5ccc0248b070e25a0b6ed5851476df4c40e87e87b95b37fd9",
   ]
 }
