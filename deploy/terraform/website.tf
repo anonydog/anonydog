@@ -4,6 +4,10 @@ resource "wercel_project" "website" {
     type        = "github"
     project_url = "https://github.com/anonydog/website"
   }
+  domains = [
+    "anonydog.org",
+    "www.anonydog.org",
+  ]
 }
 
 resource "wercel_environment_variable" "website_role_arn" {
