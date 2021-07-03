@@ -29,3 +29,10 @@ resource "wercel_environment_variable" "poller_mongo_database_url" {
   key = "MONGO_DATABASE_URL"
   value = local.mongo_database_url
 }
+
+resource "wercel_environment_variable" "poller_secret" {
+  project_id = wercel_project.poller.id
+
+  key = "ANONYDOG_SECRET"
+  value = local.anonydog_secret
+}
