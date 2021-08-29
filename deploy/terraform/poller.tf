@@ -1,38 +1,67 @@
-resource "wercel_project" "poller" {
+resource "vercel_project" "poller" {
   name = "poller"
-  domains = [
+  alias = [
     "poller-omega.vercel.app",
   ]
-  repo {
-    type        = "github"
-    project_url = "https://github.com/anonydog/poller"
+  git_repository {
+    type  = "github"
+    repo  = "anonydog/poller"
   }
 }
 
-resource "wercel_environment_variable" "poller_redis_database_url" {
-  project_id = wercel_project.poller.id
+resource "vercel_env" "poller_redis_database_url" {
+  project_id = vercel_project.poller.id
+  target     = [ "production" ]
 
-  key = "REDIS_DATABASE_URL"
-  value = local.redis_database_url
+  key    = "REDIS_DATABASE_URL"
+  type   = "secret"
+  value  = vercel_secret.poller_redis_database_url.id
 }
 
-resource "wercel_environment_variable" "poller_github_api_access_token" {
-  project_id = wercel_project.poller.id
-
-  key = "GITHUB_API_ACCESS_TOKEN"
-  value = local.github_api_access_token
+resource "vercel_secret" "poller_redis_database_url" {
+  name   = "57f8d555-8971-45fe-a621-25c4b65902ba"
+  value  = local.redis_database_url
 }
 
-resource "wercel_environment_variable" "poller_mongo_database_url" {
-  project_id = wercel_project.poller.id
+resource "vercel_env" "poller_github_api_access_token" {
+  project_id = vercel_project.poller.id
+  target     = [ "production" ]
 
-  key = "MONGO_DATABASE_URL"
+  key    = "GITHUB_API_ACCESS_TOKEN"
+  type   = "secret"
+  value  = vercel_secret.poller_redis_database_url.id
+}
+
+resource "vercel_secret" "poller_github_api_access_token" {
+  name   = "3ee99711-4f4c-41e5-84cc-d70fb9b1f187"
+  value  = local.github_api_access_token
+}
+
+resource "vercel_env" "poller_mongo_database_url" {
+  project_id = vercel_project.poller.id
+  target     = [ "production" ]
+
+  key    = "MONGO_DATABASE_URL"
+  type   = "secret"
+  value  = vercel_secret.poller_mongo_database_url.id
+}
+
+resource "vercel_secret" "poller_mongo_database_url" {
+  name  = "06ac9a89-dbfe-4f9e-9013-f9585e01e3d6"
   value = local.mongo_database_url
 }
 
-resource "wercel_environment_variable" "poller_secret" {
-  project_id = wercel_project.poller.id
+resource "vercel_env" "poller_secret" {
+  project_id = vercel_project.poller.id
+  target     = [ "production" ]
 
-  key = "ANONYDOG_SECRET"
-  value = local.anonydog_secret
+  key     = "ANONYDOG_SECRET"
+  type    = "secret"
+  value   = vercel_secret.poller_secret.id
 }
+
+resource "vercel_secret" "poller_secret" {
+  name   = "e8d977f1-bd7e-4d97-a601-a83348fc0256"
+  value  = local.anonydog_secret
+}
+

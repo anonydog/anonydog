@@ -4,6 +4,10 @@ terraform {
       source = "thiagoarrais/wercel"
       version = "= 0.1.1"
     }
+    vercel = {
+      source = "chronark/vercel"
+      version = "= 0.14.0"
+    }
     aws = {
       source = "hashicorp/aws"
       version = "~> 3.40.0"
