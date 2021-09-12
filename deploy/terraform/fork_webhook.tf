@@ -41,11 +41,13 @@ resource "wercel_environment_variable" "fork_webhook_aws_access_key" {
   value = aws_iam_access_key.sns_access_key.id
 }
 
-resource "wercel_environment_variable" "fork_webhook_aws_secret_key" {
-  project_id = wercel_project.fork_webhook.id
+resource "vercel_env" "fork_webhook_aws_secret_key" {
+  project_id  = wercel_project.fork_webhook.id
+  target      = [ "production" ]
 
-  key = "STATE_MACHINE_SECRET_KEY"
-  value = aws_iam_access_key.sns_access_key.secret
+  type  = "secret"
+  key   = "STATE_MACHINE_SECRET_KEY"
+  value = vercel_secret.sns_secret_key.id
 }
 
 resource "wercel_environment_variable" "fork_webhook_state_machine_arn" {
