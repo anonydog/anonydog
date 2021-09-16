@@ -1,9 +1,5 @@
 terraform {
   required_providers {
-    wercel = {
-      source = "thiagoarrais/wercel"
-      version = "= 0.1.1"
-    }
     vercel = {
       source = "chronark/vercel"
       version = "= 0.14.0"
